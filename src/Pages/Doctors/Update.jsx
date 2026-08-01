@@ -620,7 +620,7 @@ export default function UpdateDoctor() {
                         src={
                           doctorDetails?.image
                             ? `${imageBaseURL}/${doctorDetails?.image}` // Use profilePicture
-                            : "/admin/profilePicturePlaceholder.png" // Fallback placeholder image
+                            : "/profilePicturePlaceholder.png" // Fallback placeholder image
                         }
                       />
                       {doctorDetails?.image && (

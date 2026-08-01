@@ -226,7 +226,7 @@ export default function AddUser() {
                 src={
                   profilePicture
                     ? URL.createObjectURL(profilePicture)
-                    : "/admin/profilePicturePlaceholder.png"
+                    : "/profilePicturePlaceholder.png"
                 }
               />
               {profilePicture && (
