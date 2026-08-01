@@ -32,7 +32,7 @@ import { FaTrash } from "react-icons/fa";
 import DeletePrescription from "./DeletePrescription";
 import Pagination from "../../Components/Pagination";
 import DateRangeCalender from "../../Components/DateRangeCalender";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import moment from "moment";
 import imageBaseURL from "../../Controllers/image";
 

@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import getStatusBadge from "../../Hooks/StatusBadge";
 import { useEffect, useRef, useState } from "react";
 import Pagination from "../../Components/Pagination";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import ErrorPage from "../../Components/ErrorPage";
 import useHasPermission from "../../Hooks/HasPermission";
 import NotAuth from "../../Components/NotAuth";

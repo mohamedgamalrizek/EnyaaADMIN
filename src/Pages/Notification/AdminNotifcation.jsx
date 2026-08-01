@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 import useHasPermission from "../../Hooks/HasPermission";
 import { useEffect, useRef, useState } from "react";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import NotAuth from "../../Components/NotAuth";
 import DateRangeCalender from "../../Components/DateRangeCalender";
 import Pagination from "../../Components/Pagination";

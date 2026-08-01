@@ -23,7 +23,7 @@ import NotAuth from "../../Components/NotAuth";
 import DynamicTable from "../../Components/DataTable";
 import { FiEdit } from "react-icons/fi";
 import UpdatePatientFiles from "../Patients/UpdatePatientFiles";
-import useDebounce from "../../Hooks/UseDebounce"; // Use debounce for search
+import useDebounce from "../../Hooks/useDebounce"; // Use debounce for search
 import Pagination from "../../Components/Pagination"; // Pagination component
 import DateRangeCalender from "../../Components/DateRangeCalender"; // Date range filtering component
 import imageBaseURL from "../../Controllers/image";

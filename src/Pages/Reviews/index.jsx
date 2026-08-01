@@ -13,7 +13,7 @@ import { useState, useEffect, useRef } from "react";
 import moment from "moment";
 import DynamicTable from "../../Components/DataTable";
 import Pagination from "../../Components/Pagination";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import DateRangeCalender from "../../Components/DateRangeCalender";
 import { GET } from "../../Controllers/ApiControllers";
 import ErrorPage from "../../Components/ErrorPage";

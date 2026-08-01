@@ -19,7 +19,7 @@ import getStatusBadge from "../../Hooks/StatusBadge";
 import getCancellationStatusBadge from "../../Hooks/CancellationReqBadge";
 import { useEffect, useRef, useState } from "react";
 import Pagination from "../../Components/Pagination";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import ErrorPage from "../../Components/ErrorPage";
 import useHasPermission from "../../Hooks/HasPermission";
 import NotAuth from "../../Components/NotAuth";

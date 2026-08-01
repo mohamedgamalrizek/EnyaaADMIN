@@ -20,7 +20,7 @@ import useHasPermission from "../../Hooks/HasPermission";
 import NotAuth from "../../Components/NotAuth";
 import { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import Pagination from "../../Components/Pagination";
 import DateRangeCalender from "../../Components/DateRangeCalender";
 

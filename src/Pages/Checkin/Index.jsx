@@ -25,7 +25,7 @@ import AddCheckin from "./Add";
 import UpdateCheckin from "./Update";
 import DeleteCheckin from "./Delete";
 import moment from "moment";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import DateRangeCalender from "../../Components/DateRangeCalender";
 import Pagination from "../../Components/Pagination";
 import { daysBack } from "../../Controllers/dateConfig";

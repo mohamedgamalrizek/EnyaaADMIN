@@ -19,7 +19,7 @@ import DynamicTable from "../../Components/DataTable";
 import { GET } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import AddPatients from "./AddPatients";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import Pagination from "../../Components/Pagination";
 import useHasPermission from "../../Hooks/HasPermission";
 import NotAuth from "../../Components/NotAuth";

@@ -17,7 +17,7 @@ import getFile from "./getfile";
 import printPrescription from "./getPrescription";
 import Pagination from "../../Components/Pagination";
 import DateRangeCalender from "../../Components/DateRangeCalender";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import moment from "moment";
 import { useState } from "react";
 

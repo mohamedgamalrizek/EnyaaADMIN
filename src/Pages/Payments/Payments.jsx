@@ -20,7 +20,7 @@ import api from "../../Controllers/api";
 import { TbDownload } from "react-icons/tb";
 import useHasPermission from "../../Hooks/HasPermission";
 import NotAuth from "../../Components/NotAuth";
-import useDebounce from "../../Hooks/UseDebounce";
+import useDebounce from "../../Hooks/useDebounce";
 import Pagination from "../../Components/Pagination";
 import DateRangeCalender from "../../Components/DateRangeCalender";
 
