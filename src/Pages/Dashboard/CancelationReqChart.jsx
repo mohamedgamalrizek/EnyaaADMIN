@@ -2,7 +2,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { t } from "../../lib/arabicUi";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -10,14 +9,14 @@ const CancellationPieChart = ({ cancelData }) => {
   // Data structure using props
   const data = {
     labels: [
-      t("Cancel Request Initiated"),
-      t("Cancel Request Rejected"),
-      t("Cancel Request Approved"),
-      t("Cancel Request Processing"),
+      "Cancel Request Initiated",
+      "Cancel Request Rejected",
+      "Cancel Request Approved",
+      "Cancel Request Processing",
     ],
     datasets: [
       {
-        label: t("Appointment Cancellations"),
+        label: "Appointment Cancellations",
         data: [
           cancelData?.total_cancel_req_initiated_appointment || 0,
           cancelData?.total_cancel_req_rejected_appointment || 0,
@@ -57,7 +56,7 @@ const CancellationPieChart = ({ cancelData }) => {
   return (
     <Box p={4} borderRadius="md"  boxShadow="md">
       <Text fontSize="lg" fontWeight="bold" mb={4}>
-        {t("Appointment Cancellation Status")}
+        Appointment Cancellation Status
       </Text>
       <Box h="300px">
         <Doughnut data={data} options={options} />

@@ -27,7 +27,6 @@ import {
   TimeScale,
 } from "chart.js";
 import "chartjs-adapter-moment"; // Import the Moment adapter
-import { t } from "../../lib/arabicUi";
 
 // Register components
 ChartJS.register(
@@ -104,7 +103,7 @@ function TransactionChart({ creditTransactions, debitTransactions }) {
     labels: sortedDates,
     datasets: [
       {
-        label: t("Credit"),
+        label: "Credit",
         data: sortedDates.map(
           (date) => creditData.find((d) => d.date === date)?.amount || 0
         ),
@@ -115,7 +114,7 @@ function TransactionChart({ creditTransactions, debitTransactions }) {
         tension: 0.2,
       },
       {
-        label: t("Debit"),
+        label: "Debit",
         data: sortedDates.map(
           (date) => debitData.find((d) => d.date === date)?.amount || 0
         ),
@@ -193,11 +192,11 @@ function TransactionChart({ creditTransactions, debitTransactions }) {
     >
       <Flex mb={5} justify={"space-between"} align={"center"}>
         <Text fontSize="lg" fontWeight="bold">
-          {t(`Transactions in the Last ${lastDays} Days`)}
+          Transactions in the Last {lastDays} Days
         </Text>
         <Menu>
           <MenuButton as={Button} rightIcon={<AiOutlineDown />} size={"sm"}>
-            {t(`Last ${lastDays} Days`)}
+            Last {lastDays} Days
           </MenuButton>
           <MenuList>
             {[15, 30, 90, 180, 365].map((item) => (
@@ -209,7 +208,7 @@ function TransactionChart({ creditTransactions, debitTransactions }) {
                 }}
                 fontSize={"sm"}
               >
-                {t(`Last ${item} Days`)}
+                Last {item} Days
               </MenuItem>
             ))}
           </MenuList>

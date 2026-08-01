@@ -15,11 +15,9 @@ import {
 import moment from "moment";
 import { useState } from "react";
 import { DateRangePicker } from "react-date-range";
-import { arEG } from "date-fns/locale";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { daysBack } from "../Controllers/dateConfig";
-import { t } from "../lib/arabicUi";
 
 const DateRangeCalender = ({ setDateRange, setLastDays, size, dateRange }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -77,7 +75,7 @@ const DateRangeCalender = ({ setDateRange, setLastDays, size, dateRange }) => {
                 dateRange?.startDate || selectionRange?.startDate,
                 dateRange?.endDate || selectionRange?.endDate
               )
-            : "نطاق تاريخ غير صالح"
+            : "Invalid date range"
         }
         cursor="pointer"
         w={"fit-content"}
@@ -110,7 +108,7 @@ const CalenderModal = ({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader fontSize="md" py={2}>
-          اختر نطاق التاريخ
+          Select Date Range
         </ModalHeader>
         <ModalCloseButton top={2} size="sm" />
         <ModalBody p={0}>
@@ -118,8 +116,7 @@ const CalenderModal = ({
             <DateRangePicker
               ranges={[selectionRange]}
               onChange={handleSelect}
-              rangeColors={["#5fc1ab"]}
-              locale={arEG}
+              rangeColors={["#3182CE"]}
               showSelectionPreview={true}
               moveRangeOnFirstSelection={false}
             />
@@ -132,7 +129,7 @@ const CalenderModal = ({
               colorScheme="blue"
               onClick={setDate}
             >
-              {t("Set")}
+              Set
             </Button>
           </Box>
         </ModalBody>

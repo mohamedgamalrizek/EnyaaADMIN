@@ -10,7 +10,6 @@ import {
   CategoryScale,
 } from "chart.js";
 import currency from "../../Controllers/currency";
-import { t } from "../../lib/arabicUi";
 
 // Register necessary Chart.js components
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -47,7 +46,7 @@ function TransactionPieChart({ transactions }) {
   
 
   const chartData = {
-    labels: Object.keys(transactionTotals).map((type) => t(type)),
+    labels: Object.keys(transactionTotals),
     datasets: [
       {
         data: Object.values(transactionTotals),
@@ -81,7 +80,7 @@ function TransactionPieChart({ transactions }) {
 
   return (
     <Box p={4} borderRadius="md" maxW={"100%"}>
-      <Text mb={4}>{t("Transaction Total Amount Distribution")}</Text>
+      <Text mb={4}>Transaction Total Amount Distribution</Text>
       <Doughnut data={chartData} options={options} width={50} />
     </Box>
   );

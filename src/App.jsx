@@ -69,7 +69,7 @@ export default function App() {
         {location.pathname === "/queue" ? (
           <QueueList />
         ) : admin ? (
-          <Box display={"flex"} width={"100%"} dir="rtl">
+          <Box display={"flex"} width={"100%"}>
             {" "}
             <Box>
               {" "}

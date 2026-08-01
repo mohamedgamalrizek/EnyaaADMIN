@@ -25,7 +25,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { t } from "../../lib/arabicUi";
 
 ChartJS.register(
   LineElement,
@@ -110,7 +109,7 @@ function AppointmentChart({
     labels: sortedDates,
     datasets: [
       {
-        label: t("All"),
+        label: "All",
         data: sortedDates.map(
           (date) => data.find((d) => d.date === date)?.count || 0
         ),
@@ -121,7 +120,7 @@ function AppointmentChart({
         tension: 0.2, // Curved lines
       },
       {
-        label: t("Cancelled"),
+        label: "Cancelled",
         data: sortedDates.map(
           (date) => cancelledData.find((d) => d.date === date)?.count || 0
         ),
@@ -132,7 +131,7 @@ function AppointmentChart({
         tension: 0.2, // Curved lines
       },
       {
-        label: t("Completed"),
+        label: "Compleated",
         data: sortedDates.map(
           (date) => compleatedData.find((d) => d.date === date)?.count || 0
         ),
@@ -212,11 +211,11 @@ function AppointmentChart({
       <Flex mb={5} justify={"space-between"} align={"center"}>
         {" "}
         <Text fontSize="lg" fontWeight="bold">
-          {t(`Appointments in the Last ${lastDays} Days`)}
+          Appointments in the Last {lastDays} Days
         </Text>
         <Menu>
           <MenuButton as={Button} rightIcon={<AiOutlineDown />} size={"sm"}>
-            {t(`Last ${lastDays} Days`)}
+            Last {lastDays} Days
           </MenuButton>
           <MenuList>
             {[15, 30, 90, 180, 365].map((item) => (
@@ -228,7 +227,7 @@ function AppointmentChart({
                 }}
                 fontSize={"sm"}
               >
-                {t(`Last ${item} Days`)}
+                Last {item} Days
               </MenuItem>
             ))}
           </MenuList>

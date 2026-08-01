@@ -38,7 +38,6 @@ import {
 } from "./AppointmentCards";
 import AppointmentsCalendar from "./Calender";
 import AddCheckin from "../Checkin/Add";
-import { t } from "../../lib/arabicUi";
 
 const getData = async () => {
   const res = await GET(admin.token, "get_dashboard_count");
@@ -344,9 +343,9 @@ const Buttons = () => {
             <Button
               size={"xs"}
               colorScheme={"blue"}
-              bg={"main.700"}
+              bg={"blue.700"}
               _hover={{
-                bg: "main.700",
+                bg: "blue.700",
               }}
               color={"#fff"}
               leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -355,14 +354,14 @@ const Buttons = () => {
               }}
               borderRadius={0}
             >
-              {t("Add New Appointment")}
+              Add New Appointment
             </Button>
             <Button
               size={"xs"}
               colorScheme={"blue"}
-              bg={"main.700"}
+              bg={"blue.700"}
               _hover={{
-                bg: "main.700",
+                bg: "blue.700",
               }}
               color={"#fff"}
               leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -371,14 +370,14 @@ const Buttons = () => {
               }}
               borderRadius={0}
             >
-              {t("Add Doctor")}
+              Add Doctor
             </Button>
             <Button
               size={"xs"}
               colorScheme={"blue"}
-              bg={"main.700"}
+              bg={"blue.700"}
               _hover={{
-                bg: "main.700",
+                bg: "blue.700",
               }}
               color={"#fff"}
               leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -387,14 +386,14 @@ const Buttons = () => {
               }}
               borderRadius={0}
             >
-              {t("Add Patient")}
+              Add Patient
             </Button>
             <Button
               size={"xs"}
               colorScheme={"blue"}
-              bg={"main.700"}
+              bg={"blue.700"}
               _hover={{
-                bg: "main.700",
+                bg: "blue.700",
               }}
               color={"#fff"}
               leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -403,14 +402,14 @@ const Buttons = () => {
               }}
               borderRadius={0}
             >
-              {t("Add Medicine")}
+              Add Medicine
             </Button>
             <Button
               size={"xs"}
               colorScheme={"blue"}
-              bg={"main.700"}
+              bg={"blue.700"}
               _hover={{
-                bg: "main.700",
+                bg: "blue.700",
               }}
               color={"#fff"}
               leftIcon={<BiCheckShield fontSize={18} />}
@@ -419,7 +418,7 @@ const Buttons = () => {
               }}
               borderRadius={0}
             >
-              {t("New checkin")}
+              New checkin
             </Button>
           </Flex>
           <ClockWithCountdown />
@@ -431,9 +430,9 @@ const Buttons = () => {
               <Button
                 size={"xs"}
                 colorScheme={"blue"}
-                bg={"main.700"}
+                bg={"blue.700"}
                 _hover={{
-                  bg: "main.700",
+                  bg: "blue.700",
                 }}
                 color={"#fff"}
                 leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -442,16 +441,16 @@ const Buttons = () => {
                 }}
                 borderRadius={0}
               >
-                {t("Add New Appointment")}
+                Add New Appointment
               </Button>
             )}
             {hasPermission("DOCTOR_ADD") && (
               <Button
                 size={"xs"}
                 colorScheme={"blue"}
-                bg={"main.700"}
+                bg={"blue.700"}
                 _hover={{
-                  bg: "main.700",
+                  bg: "blue.700",
                 }}
                 color={"#fff"}
                 leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -460,16 +459,16 @@ const Buttons = () => {
                 }}
                 borderRadius={0}
               >
-                {t("Add Doctor")}
+                Add Doctor
               </Button>
             )}
             {hasPermission("PATIENT_ADD") && (
               <Button
                 size={"xs"}
                 colorScheme={"blue"}
-                bg={"main.700"}
+                bg={"blue.700"}
                 _hover={{
-                  bg: "main.700",
+                  bg: "blue.700",
                 }}
                 color={"#fff"}
                 leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -478,16 +477,16 @@ const Buttons = () => {
                 }}
                 borderRadius={0}
               >
-                {t("Add Patient")}
+                Add Patient
               </Button>
             )}
             {hasPermission("MEDICINE_ADD") && (
               <Button
                 size={"xs"}
                 colorScheme={"blue"}
-                bg={"main.700"}
+                bg={"blue.700"}
                 _hover={{
-                  bg: "main.700",
+                  bg: "blue.700",
                 }}
                 color={"#fff"}
                 leftIcon={<MdAddCircleOutline fontSize={18} />}
@@ -496,16 +495,16 @@ const Buttons = () => {
                 }}
                 borderRadius={0}
               >
-                {t("Add Medicine")}
+                Add Medicine
               </Button>
             )}
             {hasPermission("CHECKIN_ADD") && (
               <Button
                 size={"xs"}
                 colorScheme={"blue"}
-                bg={"main.700"}
+                bg={"blue.700"}
                 _hover={{
-                  bg: "main.700",
+                  bg: "blue.700",
                 }}
                 color={"#fff"}
                 leftIcon={<BiCheckShield fontSize={18} />}
@@ -514,7 +513,7 @@ const Buttons = () => {
                 }}
                 borderRadius={0}
               >
-                {t("New checkin")}
+                Add Medicine
               </Button>
             )}
           </Flex>

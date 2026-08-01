@@ -16,7 +16,6 @@ import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import DateRangeCalender from "../../Components/DateRangeCalender";
 import { daysBack } from "../../Controllers/dateConfig";
-import { t } from "../../lib/arabicUi";
 
 const filterRecentData = (data, lastDays) => {
   const lastDay = moment().subtract(lastDays, "days").startOf("day");
@@ -49,17 +48,17 @@ const filterRecentData = (data, lastDays) => {
       "Time Slots": time_slots,
       Type:
         type === "Emergency" ? (
-          <Badge colorScheme="red">{t(type)}</Badge>
+          <Badge colorScheme="red">{type}</Badge>
         ) : (
-          <Badge colorScheme="green">{t(type)}</Badge>
+          <Badge colorScheme="green">{type}</Badge>
         ),
       "Payment Status":
         payment_status === "Paid" ? (
-          <Badge colorScheme="green">{t(payment_status)}</Badge>
+          <Badge colorScheme="green">{payment_status}</Badge>
         ) : payment_status === "Refunded" ? (
-          <Badge colorScheme="blue">{t(payment_status)}</Badge>
+          <Badge colorScheme="blue">{payment_status}</Badge>
         ) : (
-          <Badge colorScheme="red">{t("Not Paid")}</Badge>
+          <Badge colorScheme="red">{"Not Paid"}</Badge>
         ),
     };
   });
@@ -86,7 +85,7 @@ function AppointmentReg({ Appointments }) {
     >
       <Flex mb={5} justify={"space-between"} align={"center"}>
         <Text fontSize="Lg" fontWeight="bold">
-          {t(`Appointments Made in the Last ${lastDays} Days`)}
+          Appointments Made in the Last {lastDays} Days
         </Text>
         <DateRangeCalender
           dateRange={dateRange}

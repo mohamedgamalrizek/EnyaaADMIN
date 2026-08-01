@@ -5,7 +5,6 @@ import { useState } from "react";
 import DynamicTable from "../../Components/DataTable";
 import DateRangeCalender from "../../Components/DateRangeCalender";
 import { daysBack } from "../../Controllers/dateConfig";
-import { t } from "../../lib/arabicUi";
 
 const filterRecentData = (data, lastDays) => {
   const lastDay = moment().subtract(lastDays, "days").startOf("day");
@@ -40,7 +39,7 @@ function UsersReg({ Users }) {
     >
       <Flex mb={5} justify={"space-between"} align={"center"} gap={5}>
         <Text fontSize="md" fontWeight="bold">
-          {t(`Users Registration in the Last ${lastDays} Days`)}
+          Users Registration in the Last {lastDays} Days
         </Text>
         <DateRangeCalender
           dateRange={dateRange}

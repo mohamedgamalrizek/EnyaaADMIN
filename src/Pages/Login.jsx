@@ -66,7 +66,7 @@ export default function Login() {
       if (loginData.response === 200) {
         if (!loginData.data.role || loginData.data.role.length === 0) {
           toastError(
-            "You do not have permission to access the admin panel. Please contact the administrator if you believe this is an error."
+            "ليس لديك صلاحية للوصول إلى لوحة الإدارة. يرجى التواصل مع المسؤول إذا كنت تعتقد أن هذا خطأ."
           );
         } else if (loginData.data.role.length > 1) {
           // Multiple roles, show role selection modal
@@ -81,11 +81,11 @@ export default function Login() {
           loginUser(loginData.data, loginData.token, loginData.data.role[0]);
         }
       } else {
-        toastError("Wrong Email Or Password.");
+        toastError("البريد الإلكتروني أو كلمة المرور غير صحيحة.");
       }
     } catch (error) {
       setisLoading(false);
-      toastError("An error occurred during login. Please try again.");
+      toastError("حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.");
       console.error(error);
     }
   };
@@ -99,7 +99,7 @@ export default function Login() {
     };
     localStorage.setItem("admin", JSON.stringify(combinedObject));
     toast({
-      title: "Login Success.",
+      title: "تم تسجيل الدخول بنجاح.",
       status: "success",
       duration: 9000,
       isClosable: true,
@@ -155,10 +155,10 @@ export default function Login() {
             minW={"600px"}
             color={useColorModeValue("gray.800", "gray.800")}
           >
-            <Heading fontSize={"2xl"}>Sign in to your account</Heading>
+            <Heading fontSize={"2xl"}>تسجيل الدخول إلى حسابك</Heading>
             <FormControl>
               <FormLabel>
-                Email
+                البريد الإلكتروني
                 <Badge bg={"transparent"} color={"red"}>
                   *
                 </Badge>
@@ -167,7 +167,7 @@ export default function Login() {
                 type="email"
                 isRequired
                 isFocused
-                placeholder="Email"
+                placeholder="البريد الإلكتروني"
                 {...register("email")}
               />
             </FormControl>
@@ -178,19 +178,19 @@ export default function Login() {
                 justifyContent={"space-between"}
               >
                 <span>
-                  Password
+                  كلمة المرور
                   <Badge bg={"transparent"} color={"red"}>
                     *
                   </Badge>
                 </span>
                 <Link fontSize={14} color={"blue.500"} onClick={onPasswordOpen}>
-                  Forget password?
+                  نسيت كلمة المرور؟
                 </Link>
               </FormLabel>
               <InputGroup size="md">
                 <Input
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter password"
+                  placeholder="أدخل كلمة المرور"
                   isRequired
                   isFocused
                   {...register("password")}
@@ -203,7 +203,7 @@ export default function Login() {
                     onClick={handleTogglePassword}
                     icon={showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
                     aria-label={
-                      showPassword ? "Hide password" : "Show password"
+                      showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"
                     }
                     color={useColorModeValue("gray.800", "gray.800")}
                   />
@@ -217,7 +217,7 @@ export default function Login() {
               type="submit"
               isLoading={isLoading}
             >
-              Sign in
+              تسجيل الدخول
             </Button>
           </Stack>
         </Flex>
@@ -228,7 +228,7 @@ export default function Login() {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Login As - </ModalHeader>
+          <ModalHeader>تسجيل الدخول كـ</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <RadioGroup onChange={setSelectedRole} value={selectedRole}>
@@ -250,10 +250,10 @@ export default function Login() {
               onClick={handleRoleSelection}
               isDisabled={!selectedRole}
             >
-              Continue
+              متابعة
             </Button>
             <Button variant="ghost" onClick={onClose}>
-              Cancel
+              إلغاء
             </Button>
           </ModalFooter>
         </ModalContent>

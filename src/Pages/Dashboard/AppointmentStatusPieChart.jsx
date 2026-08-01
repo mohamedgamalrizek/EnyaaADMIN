@@ -9,7 +9,6 @@ import {
   ArcElement,
   CategoryScale,
 } from "chart.js";
-import { t } from "../../lib/arabicUi";
 
 // Register necessary Chart.js components
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -50,7 +49,7 @@ function StatusPieChart({ appointments }) {
 
   const statusCounts = getStatusCounts(appointments || []);
   const chartData = {
-    labels: Object.keys(statusCounts).map((status) => t(status)),
+    labels: Object.keys(statusCounts),
     datasets: [
       {
         data: Object.values(statusCounts),
@@ -64,7 +63,7 @@ function StatusPieChart({ appointments }) {
 
   return (
     <Box p={4} borderRadius="md" maxW={"100%"}>
-      <Text mb={4}>{t("Appointment Status Distribution")}</Text>
+      <Text mb={4}>Appointment Status Distribution</Text>
       <Doughnut data={chartData} />
     </Box>
   );

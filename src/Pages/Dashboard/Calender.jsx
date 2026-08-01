@@ -10,25 +10,8 @@ import {
   useTheme,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { t } from "../../lib/arabicUi";
 
 const localizer = momentLocalizer(moment);
-
-const calendarMessages = {
-  allDay: "طوال اليوم",
-  previous: "السابق",
-  next: "التالي",
-  today: "اليوم",
-  month: "شهر",
-  week: "أسبوع",
-  day: "يوم",
-  agenda: "جدول",
-  date: "التاريخ",
-  time: "الوقت",
-  event: "الموعد",
-  noEventsInRange: "لا توجد مواعيد في هذا النطاق",
-  showMore: (total) => `+${total} المزيد`,
-};
 
 const AppointmentsCalendar = ({ appointmentData }) => {
   const { colorMode } = useColorMode();
@@ -41,12 +24,12 @@ const AppointmentsCalendar = ({ appointmentData }) => {
   // Convert appointment data to events format
   const events = appointmentData?.map((appointment) => ({
     id: appointment.id,
-    title: `د. ${appointment.doct_f_name} ${appointment.doct_l_name} مع ${appointment.patient_f_name} ${appointment.patient_l_name} - ${t(appointment.status)}`,
+    title: `Dr. ${appointment.doct_f_name} ${appointment.doct_l_name}'s Appointment with - ${appointment.patient_f_name} ${appointment.patient_l_name} - ${appointment.status}`,
     start: moment(`${appointment.date} ${appointment.time_slots}`).toDate(),
     end: moment(`${appointment.date} ${appointment.time_slots}`)
       .add(30, "minutes") // Assuming each appointment is 30 minutes long
       .toDate(),
-    description: `النوع: ${t(appointment.type)}, القسم: ${appointment.dept_title}`,
+    description: `Type: ${appointment.type}, Dept: ${appointment.dept_title}`,
     status: appointment.status,
   }));
 
@@ -62,7 +45,7 @@ const AppointmentsCalendar = ({ appointmentData }) => {
       bg={colorMode === "dark" ? theme.colors.gray[900] : "#fff"}
     >
       <Text textAlign={"center"} fontSize={"lg"} fontWeight={"bold"}>
-        {t("Appointment Calendar")}
+        Appointment Calendar
       </Text>
       <Divider mb={5} mt={2} />
 
@@ -82,8 +65,6 @@ const AppointmentsCalendar = ({ appointmentData }) => {
           }}
           defaultView="day"
           views={["week", "day", "agenda"]}
-          culture="ar"
-          messages={calendarMessages}
           min={
             new Date(
               startOfWeek.getFullYear(),

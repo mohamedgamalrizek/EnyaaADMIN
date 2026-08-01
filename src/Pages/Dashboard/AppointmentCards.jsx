@@ -15,33 +15,32 @@ import { MdPendingActions } from "react-icons/md";
 import { BiCalendar } from "react-icons/bi";
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { ImCancelCircle } from "react-icons/im";
-import { t } from "../../lib/arabicUi";
 
 export function AppointmentCardsTop({ data }) {
   const cardData = [
     {
-      title: t("Today's Appointment"),
+      title: "Today's Appointment",
       value: data?.total_today_appointment || 0,
       icon: <FaUserMd fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
     {
-      title: t("Upcoming Appointment"),
+      title: "Upcoming Appointment",
       value: data?.total_upcoming_appointments || 0,
       icon: <MdOutlineUpdate fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
     {
-      title: t("Pending Appointments"),
+      title: "Pending Appointments",
       value: data?.total_pending_appointment || 0,
       icon: <MdPendingActions fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
     {
-      title: t("Confirm Appointments"),
+      title: "Confirm Appointments",
       value: data?.total_confirmed_appointment || 0, // You may need to replace this with actual data
       icon: <BiCalendar fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
   ];
 
@@ -67,7 +66,7 @@ export function AppointmentCardsTop({ data }) {
               <Flex
                 p={2}
                 borderRadius="50%"
-                bg="main.700"
+                bg="blue.700"
                 w={16}
                 h={16}
                 align="center"
@@ -86,30 +85,30 @@ export function AppointmentCardsTop({ data }) {
 export function AppointmentCardsOthers({ data }) {
   const cardData = [
     {
-      title: t("Cancelled Appointments"),
+      title: "Cancelled Appointments",
       value: data?.total_cancelled_appointment || 0,
       icon: <ImCancelCircle fontSize="32px" />,
       color: "red.500",
     },
     {
-      title: t("Rejected Appointments"),
+      title: "Rejected Appointments",
       value: data?.total_rejected_appointment || 0,
       icon: <ImCancelCircle fontSize="32px" />,
       color: "red.400",
     },
 
     {
-      title: t("Completed Appointments"),
+      title: "Completed Appointments",
       value: data?.total_completed_appointment || 0,
       icon: <AiOutlineCheckCircle fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
 
     {
-      title: t("Visited Appointments"),
+      title: "Visited Appointments",
       value: data?.total_visited_appointment || 0,
       icon: <BiBeenHere fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
   ];
   return (
@@ -134,7 +133,7 @@ export function AppointmentCardsOthers({ data }) {
               <Flex
                 p={2}
                 borderRadius="50%"
-                bg="main.700"
+                bg="blue.700"
                 w={16}
                 h={16}
                 align="center"

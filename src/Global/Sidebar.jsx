@@ -37,7 +37,7 @@ import { Link, useLocation } from "react-router-dom"; // Import the custom hook
 import useHasPermission from "../Hooks/HasPermission";
 import admin from "../Controllers/admin";
 import useSettingsData from "../Hooks/SettingData";
-import { t } from "../lib/arabicUi";
+import { translateLabel } from "../lib/arabic";
 
 const LinkItems = [
   { name: "Dashboard", icon: AiFillDashboard },
@@ -123,11 +123,13 @@ export default function Sidebar() {
   const { settingsData } = useSettingsData();
   const title = settingsData?.find((value) => value.id_name === "clinic_name");
 
-  const filteredLinks = LinkItems.filter((item) =>
-    `${item.name} ${t(item.name)}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
+  const filteredLinks = LinkItems.filter((item) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      item.name.toLowerCase().includes(query) ||
+      translateLabel(item.name).toLowerCase().includes(query)
+    );
+  });
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -229,7 +231,7 @@ export default function Sidebar() {
                   }}
                   isOpen={isOpen}
                 >
-                  {t(link.name)}
+                  {translateLabel(link.name)}
                 </NavItem>
               </Link>
             );
@@ -246,7 +248,7 @@ export default function Sidebar() {
                     }}
                     isOpen={isOpen}
                   >
-                    {t(link.name)}
+                    {translateLabel(link.name)}
                   </NavItem>
                 </Link>
               )
@@ -261,7 +263,7 @@ export default function Sidebar() {
                   }}
                   isOpen={isOpen}
                 >
-                  {t(link.name)}
+                  {translateLabel(link.name)}
                 </NavItem>
               </Link>
             );
@@ -287,11 +289,11 @@ function NavItem({ icon: IconComponent, children, isActive, onClick, isOpen }) {
           fontSize={14}
           align="center"
           p="2"
-          ml={isOpen ? 4 : 0}
+          mr={isOpen ? 4 : 0}
           mb={2}
           borderRadius={isOpen && "lg"}
-          borderTopRightRadius={0}
-          borderBottomRightRadius={0}
+          borderTopLeftRadius={0}
+          borderBottomLeftRadius={0}
           role="group"
           cursor="pointer"
           bg={isActive ? "main.400" : "transparent"}
@@ -306,11 +308,11 @@ function NavItem({ icon: IconComponent, children, isActive, onClick, isOpen }) {
             color: "white",
           }}
           fontWeight={500}
-          justifyContent={isOpen ? "flex-start" : "center"}
+          justifyContent={isOpen ? "start" : "center"}
         >
           {IconComponent && (
             <Icon
-              me={isOpen && 4}
+              ml={isOpen && 4}
               fontSize={isOpen ? 16 : 20}
               _groupHover={{
                 color: "white",

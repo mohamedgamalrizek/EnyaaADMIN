@@ -11,34 +11,33 @@ import {
 import { AiOutlineCheckCircle } from "react-icons/ai";
 import { FaBell, FaTimesCircle } from "react-icons/fa";
 import { MdHourglassEmpty } from "react-icons/md";
-import { t } from "../../lib/arabicUi";
 
 function CancellationReqStatsics({ data }) {
   const reqData = [
     {
-      title: t("Cancellation Req Initiated"),
+      title: "Cancellation Req Initiated",
       value: data?.total_cancel_req_initiated_appointment || 0,
       icon: <FaBell fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
 
     {
-      title: t("Cancellation Request Processing"),
+      title: "Cancellation Request Processing",
       value: data?.total_cancel_req_processing_appointment || 0,
       icon: <MdHourglassEmpty fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
     {
-      title: t("Cancellation Request Approved"),
+      title: "Cancellation Request Approved",
       value: data?.total_cancel_req_approved_appointment || 0,
       icon: <AiOutlineCheckCircle fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
     {
-      title: t("Cancellation Request Rejected"),
+      title: "Cancellation Request Rejected",
       value: data?.total_cancel_req_rejected_appointment || 0,
       icon: <FaTimesCircle fontSize="32px" />,
-      color: "main.600",
+      color: "blue.600",
     },
   ];
   return (
@@ -63,7 +62,7 @@ function CancellationReqStatsics({ data }) {
               <Flex
                 p={2}
                 borderRadius="50%"
-                bg="main.700"
+                bg="blue.700"
                 w={16}
                 h={16}
                 align="center"

@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  direction: rtl;
+  text-align: right;
+  font-family: "Cairo", sans-serif;
+}
+
+input,
+textarea,
+select {
+  text-align: right;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -10,8 +24,8 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 168 45% 56%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 166 43% 48%;
+    --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
@@ -22,7 +36,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 168 45% 56%;
+    --ring: 166 43% 48%;
     --radius: 0.75rem;
   }
 
@@ -33,7 +47,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 168 45% 56%;
+    --primary: 166 43% 48%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -45,18 +59,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 168 45% 56%;
-  }
-
-  html,
-  body,
-  #root {
-    direction: rtl;
-    font-family: "Cairo", sans-serif;
-  }
-
-  body {
-    text-align: right;
+    --ring: 166 43% 48%;
   }
 }
 /* Base styles for dark mode */
@@ -88,9 +91,9 @@
 }
 
 .active .page-link {
-  background-color: var(--chakra-colors-main-400);
+  background-color: var(--chakra-colors-blue-500);
   color: var(--chakra-colors-white);
-  border-color: var(--chakra-colors-main-400);
+  border-color: var(--chakra-colors-blue-500);
 }
 
 .disabled .page-link {
@@ -114,9 +117,9 @@
 }
 
 [data-theme="dark"] .active .page-link {
-  background-color: var(--chakra-colors-main-300);
+  background-color: var(--chakra-colors-blue-300);
   color: var(--chakra-colors-gray-900);
-  border-color: var(--chakra-colors-main-300);
+  border-color: var(--chakra-colors-blue-300);
 }
 
 [data-theme="dark"] .disabled .page-link {

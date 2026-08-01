@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import imageBaseURL from "../Controllers/image";
 import moment from "moment";
-import { t } from "../lib/arabicUi";
+import { translateLabel } from "../lib/arabic";
 
 const DynamicTable = ({ data, onActionClick, minPad, imgLast }) => {
   if (!data || data.length === 0) {
@@ -90,7 +90,7 @@ const DynamicTable = ({ data, onActionClick, minPad, imgLast }) => {
         size={"sm"}
         fontWeight={500}
       >
-        <Thead background={useColorModeValue("main.50", "main.700")}>
+        <Thead background={useColorModeValue("blue.50", "blue.700")}>
           <Tr color={"#000"}>
             {onActionClick && (
               <Th
@@ -108,7 +108,7 @@ const DynamicTable = ({ data, onActionClick, minPad, imgLast }) => {
                 py={3}
                 padding={minPad || "8px 8px"}
               >
-                {t(convertToReadableFormat(column))}
+                {translateLabel(convertToReadableFormat(column))}
               </Th>
             ))}
           </Tr>
@@ -153,7 +153,7 @@ const DynamicTable = ({ data, onActionClick, minPad, imgLast }) => {
                             .utc(row[column])
                             .local()
                             .format("DD MMM YY  hh:mm A")
-                        : "N/A"}
+                        : "غير متاح"}
                     </p>
                   ) : row[column] &&
                     row[column] !== "null" &&
@@ -161,7 +161,7 @@ const DynamicTable = ({ data, onActionClick, minPad, imgLast }) => {
                     row[column] !== "" ? (
                     row[column]
                   ) : (
-                    "N/A"
+                    "غير متاح"
                   )}
                 </Td>
               ))}

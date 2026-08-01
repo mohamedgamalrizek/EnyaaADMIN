@@ -50,7 +50,7 @@ import { ADD } from "../Controllers/ApiControllers";
 import { useMutation } from "@tanstack/react-query";
 import ShowToast from "../Controllers/ShowToast";
 import Logout from "../Controllers/logout";
-import { t } from "../lib/arabicUi";
+import { translateLabel } from "../lib/arabic";
 
 const updateUser = async (data) => {
   const res = await ADD(admin.token, "update_user", data);
@@ -130,7 +130,7 @@ export default function Topbar() {
           mb={0}
           textTransform={"capitalize"}
         >
-          {location ? t(location) : t("Dashboard")}
+          {translateLabel(location ? location : "Dashboard")}
         </Text>
       </Box>
 
@@ -320,7 +320,7 @@ export default function Topbar() {
                       </InputGroup>
                     </FormControl>
                     <FormControl id="Phone">
-                      <FormLabel>الهاتف</FormLabel>
+                      <FormLabel>رقم الهاتف</FormLabel>
                       <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement pointerEvents="none">
                           <BsPhone color="gray.800" />

@@ -7,7 +7,6 @@ import {
   Text,
   useColorModeValue
 } from "@chakra-ui/react";
-import { t } from "../../lib/arabicUi";
 
 export default function WelcomeCard({ data }) {
   return (
@@ -20,15 +19,15 @@ export default function WelcomeCard({ data }) {
       bg={useColorModeValue("#fff", "gray.900")}
     >
       <Box padding={3} bg={"main.900"} pb={10} color={"#fff"}>
-        <Heading fontSize={"md"}>{t("Welcome Back!")}</Heading>
+        <Heading fontSize={"md"}>Welcome Back!</Heading>
         <Text fontSize={"sm"}>
-          {t(admin.role.name)} - {admin.f_name} {admin.l_name}
+          {admin.role.name} - {admin.f_name} {admin.l_name}
         </Text>
       </Box>
       <Box p={3} pos={"relative"} bg={useColorModeValue("#fff", "gray.900")}>
         <Image src="/admin/profile.png" w={16} top={"-8"} pos={"absolute"} />
         <Heading fontSize={"sm"} mt={6} ml={1}>
-          {t(admin.role.name)}
+          {admin.role.name}
         </Heading>
         <Text fontSize={"sm"} ml={1}>
           {admin.email}
@@ -37,17 +36,17 @@ export default function WelcomeCard({ data }) {
           <Flex justify={"space-between"} gap={6}>
             <Box flex={1}>
               <Text fontSize={"sm"} fontWeight={500}>
-                {t("Total Active Doctors")}
+                Total Active Doctors
               </Text>
-              <Text fontSize={"xl"} color={"main.600"} fontWeight={700}>
+              <Text fontSize={"xl"} color={"blue.600"} fontWeight={700}>
                 {data?.total_active_doctors}
               </Text>
             </Box>
             <Box flex={1}>
               <Text fontSize={"sm"} fontWeight={500}>
-                {t("Total Appointments")}
+                Total Appointments
               </Text>
-              <Text fontSize={"xl"} color={"main.600"} fontWeight={700}>
+              <Text fontSize={"xl"} color={"blue.600"} fontWeight={700}>
                 {data?.total_appointments}
               </Text>
             </Box>
@@ -55,17 +54,17 @@ export default function WelcomeCard({ data }) {
           <Flex justify={"space-between"} gap={6} mt={2}>
             <Box flex={1}>
               <Text fontSize={"sm"} fontWeight={500}>
-                {t("Total Patients")}
+                Total Patients
               </Text>
-              <Text fontSize={"xl"} color={"main.600"} fontWeight={700}>
+              <Text fontSize={"xl"} color={"blue.600"} fontWeight={700}>
                 {data?.total_patients}
               </Text>
             </Box>
             <Box flex={1}>
               <Text fontSize={"sm"} fontWeight={500}>
-                {t("Total Users")}
+                Total Users
               </Text>
-              <Text fontSize={"xl"} color={"main.600"} fontWeight={700}>
+              <Text fontSize={"xl"} color={"blue.600"} fontWeight={700}>
                 {data?.total_users}
               </Text>
             </Box>

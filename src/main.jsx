@@ -7,13 +7,11 @@ import { theme } from "../theme";
 import App from "./App";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "moment/dist/locale/ar";
-import moment from "moment";
-import { initArabicUi } from "./lib/arabicUi";
+import { applyArabicTranslations } from "./lib/arabic";
+
+applyArabicTranslations();
 
 const publicUrl = import.meta.env.BASE_URL;
-moment.locale("ar");
-initArabicUi();
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
