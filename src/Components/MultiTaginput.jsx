@@ -14,6 +14,7 @@ import {
 import { useColorMode } from "@chakra-ui/react";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
+import { translateLabel } from "../lib/arabic";
 
 export function MultiTagInput({
   data: items,
@@ -75,7 +76,7 @@ export function MultiTagInput({
             ? selectedItems.map((item) => (
                 <span key={item.id}>{item.title}, </span>
               ))
-            : `Select ${name}`}
+            : translateLabel(`Select ${name}`)}
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -89,11 +90,11 @@ export function MultiTagInput({
           }  `}
         >
           <CommandInput
-            placeholder={`Search ${name}`}
+            placeholder={translateLabel(`Search ${name}`)}
             colorMode={colorMode}
             className={colorMode === "dark" ? "text-[#fff]" : "text-[#000]"}
           />
-          <CommandEmpty>No {name} found.</CommandEmpty>
+          <CommandEmpty>{translateLabel(`No ${name} found.`)}</CommandEmpty>
           <CommandGroup>
             {items?.map((item) => (
               <CommandItem

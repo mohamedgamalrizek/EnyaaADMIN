@@ -14,6 +14,7 @@ import {
 } from "@/Components/ui/popover";
 import { Box, Button, Text, useColorMode } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { translateLabel } from "../lib/arabic";
 
 export default function UsersCombobox({
   data: items,
@@ -63,7 +64,7 @@ export default function UsersCombobox({
             colorMode === "dark" ? "border-[#ffffff3d]" : "border-[#E2e8f0]"
           }}`}
         >
-          {value ? `${value.f_name} ${value.l_name}` : `Select ${name}`}
+          {value ? `${value.f_name} ${value.l_name}` : translateLabel(`Select ${name}`)}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 " />
         </Button>
       </PopoverTrigger>
@@ -78,11 +79,11 @@ export default function UsersCombobox({
           }`}
         >
           <CommandInput
-            placeholder={`Search ${name}`}
+            placeholder={translateLabel(`Search ${name}`)}
             className={colorMode === "dark" ? "text-[#fff]" : "text-[#000]"}
           />
           <CommandEmpty>
-            <Text>No {name} found.</Text>
+            <Text>{translateLabel(`No ${name} found.`)}</Text>
             {addNew && (
               <Box w={"100%"} px={4} mt={2}>
                 <Button
@@ -94,7 +95,7 @@ export default function UsersCombobox({
                     addOpen();
                   }}
                 >
-                  Add {name}
+                  {translateLabel(`Add ${name}`)}
                 </Button>
               </Box>
             )}

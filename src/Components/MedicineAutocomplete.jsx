@@ -15,6 +15,7 @@ import {
 } from "@/Components/ui/popover";
 import { useColorMode } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { translateLabel } from "../lib/arabic";
 
 export function MedicineAutocomplete({
   data: items,
@@ -68,7 +69,7 @@ export function MedicineAutocomplete({
             colorMode === "dark" ? "border-[#ffffff3d]" : "border-[#E2e8f0]"
           }`}
         >
-          {value ? value : `Select ${name}`}
+          {value ? value : translateLabel(`Select ${name}`)}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 " />
         </Button>
       </PopoverTrigger>
@@ -83,13 +84,13 @@ export function MedicineAutocomplete({
           }`}
         >
           <CommandInput
-            placeholder={`Search ${name}`}
+            placeholder={translateLabel(`Search ${name}`)}
             // Bind the input value to state
             onChange={handleInputChange} // Handle custom text input
             colorMode={colorMode}
             className={colorMode === "dark" ? "text-[#fff]" : "text-[#000]"}
           />
-          <CommandEmpty>No {name} found.</CommandEmpty>
+          <CommandEmpty>{translateLabel(`No ${name} found.`)}</CommandEmpty>
           <CommandGroup>
             {value ? (
               <CommandItem
