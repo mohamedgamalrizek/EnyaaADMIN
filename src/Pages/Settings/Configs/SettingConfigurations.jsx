@@ -155,7 +155,7 @@ function SettingConfigurations({ groupName }) {
                                 <Image
                                     src={`${imageBaseURL}/${item.value}`}
                                     w={12}
-                                    fallbackSrc="imagePlaceholder.png"
+                                    fallbackSrc="/imagePlaceholder.png"
                                 />
                             ) : item.value === "true" ||
                             item.value === "false" ||

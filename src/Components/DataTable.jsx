@@ -138,10 +138,10 @@ const DynamicTable = ({ data, onActionClick, minPad, imgLast }) => {
                         row[column] !== "null" &&
                         row[column] !== null
                           ? `${imageBaseURL}/${row[column]}`
-                          : "imagePlaceholder.png"
+                          : "/imagePlaceholder.png"
                       }
                       w={8}
-                      fallbackSrc="imagePlaceholder.png"
+                      fallbackSrc="/imagePlaceholder.png"
                     />
                   ) : column === "created_at" || column === "updated_at" ? (
                     <p>
