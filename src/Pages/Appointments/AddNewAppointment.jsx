@@ -29,13 +29,14 @@ import {
 } from "@chakra-ui/react";
 import useDoctorData from "../../Hooks/UseDoctorData";
 import usePatientData from "../../Hooks/UsePatientsData";
+import useUserData from "../../Hooks/Users";
 import { useState } from "react";
 import UsersCombobox from "../../Components/UsersComboBox";
 import moment from "moment";
 import { ChevronDownIcon } from "lucide-react";
 import getStatusBadge from "../../Hooks/StatusBadge";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ADD, GET } from "../../Controllers/ApiControllers";
+import { ADD, GET, UPDATE } from "../../Controllers/ApiControllers";
 import admin from "../../Controllers/admin";
 import ShowToast from "../../Controllers/ShowToast";
 import AvailableTimeSlotes from "./AvailableTimeSlotes";
@@ -109,6 +110,32 @@ const addAppointment = async (data) => {
   return res;
 };
 
+const getCreatedAppointmentId = (res) =>
+  res?.id || res?.appointment_id || res?.data?.id || res?.data?.appointment_id;
+
+const syncInitialStatusLog = async (appointmentId, status) => {
+  if (!appointmentId) {
+    return {
+      ok: false,
+      message: "Appointment added, but status log was not synced",
+    };
+  }
+
+  const res = await UPDATE(admin.token, "update_appointment_status", {
+    id: appointmentId,
+    status,
+  });
+
+  if (res.response !== 200) {
+    return {
+      ok: false,
+      message: res.message || "Appointment added, but status log was not synced",
+    };
+  }
+
+  return { ok: true };
+};
+
 function AddNewAppointment({ isOpen, onClose , PatientID }) {
   const toast = useToast();
   const {
@@ -123,7 +150,11 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
   } = useDisclosure();
   const { doctorsData } = useDoctorData();
   const { patientsData } = usePatientData();
+  const { usersData } = useUserData();
+  const [bookingFor, setBookingFor] = useState("patient");
   const [patient, setpatient] = useState();
+  const [parentUser, setParentUser] = useState();
+  const [familyMember, setFamilyMember] = useState();
   const [doct, setdoct] = useState();
   const [selectedDate, setselectedDate] = useState();
   const [selectedSlot, setselectedSlot] = useState();
@@ -144,9 +175,23 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
     enabled: !!doct,
   });
 
+  const { data: familyMembers, isLoading: isFamilyMembersLoading } = useQuery({
+    queryKey: ["family-members", parentUser?.id],
+    queryFn: async () => {
+      const res = await GET(admin.token, `get_family_members/user/${parentUser?.id}`);
+      return res.data;
+    },
+    enabled: bookingFor === "family_member" && !!parentUser?.id,
+  });
+
   //
   const checkMissingValues = () => {
-    if (!patient) return "patient";
+    if (bookingFor === "patient" && !patient) return "patient";
+    if (bookingFor === "family_member" && !parentUser) return "guardian";
+    if (bookingFor === "family_member" && isFamilyMembersLoading)
+      return "family members";
+    if (bookingFor === "family_member" && !familyMember)
+      return "family member";
     if (!doct) return "doctor";
     if (!type) return "Appointment Type";
     if (!selectedDate) return "Date";
@@ -166,7 +211,15 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
       }
       if (!missingField) {
         let formData = {
-          patient_id: patient.id,
+          ...(bookingFor === "family_member"
+            ? {
+                family_member_id: familyMember.id,
+                user_id: parentUser.id,
+              }
+            : {
+                patient_id: patient.id,
+                user_id: patient.user_id,
+              }),
           status: status,
           date: selectedDate,
           time_slots: selectedSlot.time_start,
@@ -185,16 +238,25 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
           payment_status: paymentStatus,
           source: "Admin",
         };
-        await addAppointment(formData);
+        const res = await addAppointment(formData);
+        if (status === "Confirmed") {
+          return syncInitialStatusLog(getCreatedAppointmentId(res), status);
+        }
+        return { ok: true };
       }
     },
     onError: (error) => {
       ShowToast(toast, "error", error.message);
     },
-    onSuccess: () => {
-      ShowToast(toast, "success", "Success");
+    onSuccess: (result) => {
+      ShowToast(
+        toast,
+        result?.ok === false ? "warning" : "success",
+        result?.message || "Success"
+      );
       queryClient.invalidateQueries("appointments");
       queryClient.invalidateQueries("main-appointments");
+      queryClient.invalidateQueries("appointment-status-log");
       onClose();
     },
   });
@@ -213,29 +275,73 @@ function AddNewAppointment({ isOpen, onClose , PatientID }) {
           <ModalHeader>Add New Appointment</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Flex gap={10}>
-              {" "}
-              <Flex flex={3} gap={4} align={"center"}>
-                <UsersCombobox
-                  data={patientsData}
-                  name={"Patient"}
-                  setState={setpatient}
-                  defaultData={defalutDataForPationt}
-                  addNew={true}
-                  addOpen={AddPatientonOpen}
-                />
-                Or
-                <Button
-                  size={"xs"}
-                  w={120}
-                  colorScheme={"blue"}
-                  onClick={() => {
-                    AddPatientonOpen();
+            <Flex gap={5} mb={4}>
+              <FormControl w={220}>
+                <FormLabel
+                  fontSize={"sm"}
+                  mb={1}
+                  color={useColorModeValue("gray.600", "gray.300")}
+                >
+                  Appointment For
+                </FormLabel>
+                <Select
+                  size={"sm"}
+                  value={bookingFor}
+                  onChange={(e) => {
+                    setBookingFor(e.target.value);
+                    setpatient();
+                    setParentUser();
+                    setFamilyMember();
+                    setdefalutDataForPationt();
                   }}
                 >
-                  Add patient
-                </Button>
-              </Flex>
+                  <option value="patient">Patient</option>
+                  <option value="family_member">Family Member</option>
+                </Select>
+              </FormControl>
+            </Flex>
+            <Flex gap={10}>
+              {" "}
+              {bookingFor === "patient" ? (
+                <Flex flex={3} gap={4} align={"center"}>
+                  <UsersCombobox
+                    data={patientsData}
+                    name={"Patient"}
+                    setState={setpatient}
+                    defaultData={defalutDataForPationt}
+                    addNew={true}
+                    addOpen={AddPatientonOpen}
+                  />
+                  Or
+                  <Button
+                    size={"xs"}
+                    w={120}
+                    colorScheme={"blue"}
+                    onClick={() => {
+                      AddPatientonOpen();
+                    }}
+                  >
+                    Add patient
+                  </Button>
+                </Flex>
+              ) : (
+                <Flex flex={3} gap={4} align={"center"}>
+                  <UsersCombobox
+                    data={usersData}
+                    name={"Guardian"}
+                    setState={(user) => {
+                      setParentUser(user);
+                      setFamilyMember();
+                    }}
+                  />
+                  <UsersCombobox
+                    key={parentUser?.id || "family-member"}
+                    data={familyMembers}
+                    name={"Family Member"}
+                    setState={setFamilyMember}
+                  />
+                </Flex>
+              )}
               <Flex flex={2}>
                 <UsersCombobox
                   data={doctorsData}

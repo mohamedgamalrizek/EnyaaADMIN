@@ -1,6 +1,7 @@
 ﻿/* eslint-disable react/prop-types */
 import {
   Box,
+  Button,
   Flex,
   IconButton,
   Input,
@@ -17,12 +18,13 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import printPDF from "../../Controllers/printPDF";
 import api from "../../Controllers/api";
-import { TbDownload } from "react-icons/tb";
+import { TbDownload, TbFileExport } from "react-icons/tb";
 import useHasPermission from "../../Hooks/HasPermission";
 import NotAuth from "../../Components/NotAuth";
 import useDebounce from "../../Hooks/useDebounce";
 import Pagination from "../../Components/Pagination";
 import DateRangeCalender from "../../Components/DateRangeCalender";
+import exportExcel from "../../Controllers/exportExcel";
 
 
 const getPageIndices = (currentPage, itemsPerPage) => {
@@ -30,6 +32,40 @@ const getPageIndices = (currentPage, itemsPerPage) => {
   let endIndex = startIndex + itemsPerPage - 1;
   return { startIndex, endIndex };
 };
+
+const paymentExportColumns = [
+  { key: "id", label: "ID" },
+  { key: "txn_id", label: "Transaction ID" },
+  { key: "invoice_id", label: "Invoice ID" },
+  { key: "patient", label: "Patient" },
+  { key: "user", label: "User" },
+  { key: "appointment_id", label: "Appointment ID" },
+  { key: "amount", label: "Amount" },
+  { key: "payment_method", label: "Payment Method" },
+  { key: "payment_time_stamp", label: "Payment Timestamp" },
+  { key: "created_at", label: "Created At" },
+];
+
+const mapPaymentExportRow = (payment) => ({
+  id: payment.id,
+  txn_id: payment.txn_id || "N/A",
+  invoice_id: payment.invoice_id || "N/A",
+  patient: payment.patient_f_name
+    ? `${payment.patient_f_name || ""} ${payment.patient_l_name || ""}`.trim()
+    : "N/A",
+  user: payment.user_f_name
+    ? `${payment.user_f_name || ""} ${payment.user_l_name || ""}`.trim()
+    : "N/A",
+  appointment_id: payment.appointment_id,
+  amount: payment.amount,
+  payment_method: payment.payment_method || "N/A",
+  payment_time_stamp: payment.payment_time_stamp
+    ? moment(payment.payment_time_stamp).format("D MMM YY hh.mmA")
+    : "N/A",
+  created_at: payment.created_at
+    ? moment(payment.created_at).format("D MMM YY hh:mmA")
+    : "N/A",
+});
 
 export default function AppointmentPayments() {
   const { hasPermission } = useHasPermission();
@@ -42,6 +78,7 @@ export default function AppointmentPayments() {
     startDate: null,
     endDate: null,
   });
+  const [isExporting, setIsExporting] = useState(false);
 
   const start_date = dateRange.startDate
     ? moment(dateRange.startDate).format("YYYY-MM-DD")
@@ -125,6 +162,47 @@ export default function AppointmentPayments() {
     setPage(newPage);
   };
 
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+      const endIndex = Math.max((data?.total_record || 50) - 1, 49);
+      const url =
+        admin.role.name === "Doctor"
+          ? `get_appointment_payments/page?start=0&end=${endIndex}&search=${debouncedSearchQuery}&start_date=${start_date}&end_date=${end_date}&doctor_id=${admin.id}`
+          : `get_appointment_payments/page?start=0&end=${endIndex}&search=${debouncedSearchQuery}&start_date=${start_date}&end_date=${end_date}`;
+      const res = await GET(admin.token, url);
+      const rows = res?.data?.map(mapPaymentExportRow) || [];
+
+      if (!rows.length) {
+        toast({
+          title: "No payments to export.",
+          status: "warning",
+          duration: 1500,
+          isClosable: true,
+          position: "top",
+        });
+        return;
+      }
+
+      exportExcel({
+        title: "Appointment Payments",
+        filename: "appointment-payments",
+        columns: paymentExportColumns,
+        rows,
+      });
+    } catch {
+      toast({
+        title: "Failed to export payments.",
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const totalPage = Math.ceil(data?.total_record / 50);
 
   useEffect(() => {
@@ -180,6 +258,15 @@ export default function AppointmentPayments() {
                 size={"md"}
               />
             </Flex>
+            <Button
+              size={"sm"}
+              colorScheme="green"
+              leftIcon={<TbFileExport />}
+              onClick={handleExport}
+              isLoading={isExporting}
+            >
+              Export Excel
+            </Button>
           </Flex>
           <DynamicTable
             data={data ? data.data : []}

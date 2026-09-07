@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Badge,
   Box,
+  Button,
   Flex,
   IconButton,
   Input,
@@ -28,6 +29,8 @@ import useDebounce from "../../Hooks/useDebounce";
 import useHasPermission from "../../Hooks/HasPermission";
 import NotAuth from "../../Components/NotAuth";
 import DateRangeCalender from "../../Components/DateRangeCalender";
+import exportExcel from "../../Controllers/exportExcel";
+import { TbFileExport } from "react-icons/tb";
 
 const txnBadge = (txn) => {
   switch (txn) {
@@ -90,6 +93,38 @@ const getPageIndices = (currentPage, itemsPerPage) => {
   return { startIndex, endIndex };
 };
 
+const transactionExportColumns = [
+  { key: "id", label: "ID" },
+  { key: "patient", label: "Patient" },
+  { key: "user", label: "User" },
+  { key: "appointment_id", label: "Appointment ID" },
+  { key: "payment_transaction_id", label: "Transaction ID" },
+  { key: "amount", label: "Amount" },
+  { key: "transaction_type", label: "Transaction Type" },
+  { key: "is_wallet_txn", label: "Wallet Transaction" },
+  { key: "notes", label: "Notes" },
+  { key: "created_at", label: "Created At" },
+];
+
+const mapTransactionExportRow = (transaction) => ({
+  id: transaction.id,
+  patient: transaction.patient_id
+    ? `${transaction.patient_f_name || ""} ${transaction.patient_l_name || ""}`.trim()
+    : "N/A",
+  user: transaction.user_id
+    ? `${transaction.user_f_name || ""} ${transaction.user_l_name || ""}`.trim()
+    : "N/A",
+  appointment_id: transaction.appointment_id,
+  payment_transaction_id: transaction.payment_transaction_id || "N/A",
+  amount: transaction.amount,
+  transaction_type: transaction.transaction_type || "N/A",
+  is_wallet_txn: transaction.is_wallet_txn == 1 ? "Yes" : "No",
+  notes: transaction.notes || "N/A",
+  created_at: transaction.created_at
+    ? moment(transaction.created_at).format("D MMM YY hh:mmA")
+    : "N/A",
+});
+
 function AllTransactions() {
   const { hasPermission } = useHasPermission();
   const [page, setPage] = useState(1);
@@ -102,6 +137,7 @@ function AllTransactions() {
     startDate: null,
     endDate: null,
   });
+  const [isExporting, setIsExporting] = useState(false);
 
   const start_date = dateRange.startDate
     ? moment(dateRange.startDate).format("YYYY-MM-DD")
@@ -174,6 +210,47 @@ function AllTransactions() {
     setPage(newPage);
   };
 
+  const handleExport = async () => {
+    try {
+      setIsExporting(true);
+      const endIndex = Math.max((data?.total_record || 50) - 1, 49);
+      const url =
+        admin.role.name === "Doctor"
+          ? `get_all_transactions/doctor_id/page?start=0&end=${endIndex}&search=${debouncedSearchQuery}&start_date=${start_date}&end_date=${end_date}&doctor_id=${admin.id}`
+          : `get_all_transactions/page?start=0&end=${endIndex}&search=${debouncedSearchQuery}&start_date=${start_date}&end_date=${end_date}`;
+      const res = await GET(admin.token, url);
+      const rows = res?.data?.map(mapTransactionExportRow) || [];
+
+      if (!rows.length) {
+        toast({
+          title: "No transactions to export.",
+          status: "warning",
+          duration: 1500,
+          isClosable: true,
+          position: "top",
+        });
+        return;
+      }
+
+      exportExcel({
+        title: "All Transactions",
+        filename: "all-transactions",
+        columns: transactionExportColumns,
+        rows,
+      });
+    } catch {
+      toast({
+        title: "Failed to export transactions.",
+        status: "error",
+        duration: 1500,
+        isClosable: true,
+        position: "top",
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const totalPage = Math.ceil(data?.total_record / 50);
 
   useEffect(() => {
@@ -229,6 +306,15 @@ function AllTransactions() {
                 size={"md"}
               />
             </Flex>
+            <Button
+              size={"sm"}
+              colorScheme="green"
+              leftIcon={<TbFileExport />}
+              onClick={handleExport}
+              isLoading={isExporting}
+            >
+              Export Excel
+            </Button>
           </Flex>
           <DynamicTable
             data={data?.data}
