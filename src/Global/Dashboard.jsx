@@ -55,6 +55,7 @@ const LoginScreen = React.lazy(() =>
 );
 const ReviewsPage = React.lazy(() => import("../Pages/Reviews/index"));
 const ContactUs = React.lazy(() => import("../Pages/Contact-us/Index"));
+const WebsiteManagement = React.lazy(() => import("../Pages/Website/Index"));
 
 export default function Dashboard() {
   const location = useLocation();
@@ -155,6 +156,7 @@ export default function Dashboard() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/contact-us-form" element={<ContactUs />} />
+          <Route path="/website" element={<WebsiteManagement />} />
         </Routes>
       </Suspense>
     </Box>

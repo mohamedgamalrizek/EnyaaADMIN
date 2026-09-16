@@ -6,6 +6,7 @@ import { BiFolderOpen } from "react-icons/bi";
 import { RiCoupon2Fill } from "react-icons/ri";
 import { BiCalendar, BiCheckShield } from "react-icons/bi";
 import { MdFamilyRestroom } from "react-icons/md";
+import { MdWeb } from "react-icons/md";
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { CgArrowsExchangeAlt } from "react-icons/cg";
@@ -92,6 +93,10 @@ const LinkItems = [
     name: "Contact-Us-Form",
     icon: AiFillContacts,
     permission: "CONTACT_AS_VIEW",
+  },
+  {
+    name: "Website",
+    icon: MdWeb,
   },
   {
     name: "Notification",
