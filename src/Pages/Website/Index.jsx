@@ -51,6 +51,12 @@ const getBlogs = async () => {
   return res.data;
 };
 
+const getServices = async () => {
+  const res = await GET(admin.token, "get_website_services_admin");
+  if (res.response !== 200) throw new Error(res.message);
+  return res.data;
+};
+
 const getMessages = async () => {
   const res = await GET(admin.token, "get_website_contact_messages");
   if (res.response !== 200) throw new Error(res.message);
@@ -71,19 +77,19 @@ const getAbout = async () => {
 
 export default function WebsiteManagement() {
   return (
-    <Box>
+    <Box dir="rtl">
       <Heading size="md" mb={5}>
-        Website Management
+        إدارة محتوى الموقع
       </Heading>
       <Tabs colorScheme="blue" isLazy>
         <TabList overflowX="auto">
-          <Tab>Home Content</Tab>
-          <Tab>About Us</Tab>
-          <Tab>Section Icons</Tab>
-          <Tab>Blogs</Tab>
-          <Tab>Categories</Tab>
-          <Tab>FAQ</Tab>
-          <Tab>Contact Messages</Tab>
+          <Tab>الرئيسية</Tab>
+          <Tab>من نحن</Tab>
+          <Tab>الخدمات</Tab>
+          <Tab>المقالات</Tab>
+          <Tab>التصنيفات</Tab>
+          <Tab>الأسئلة الشائعة</Tab>
+          <Tab>رسائل التواصل</Tab>
         </TabList>
         <TabPanels>
           <TabPanel px={0}>
@@ -93,7 +99,7 @@ export default function WebsiteManagement() {
             <AboutUs />
           </TabPanel>
           <TabPanel px={0}>
-            <HomeFeatures />
+            <Services />
           </TabPanel>
           <TabPanel px={0}>
             <Blogs />
@@ -137,7 +143,7 @@ function HomeContent() {
       const res = await UPDATE(admin.token, "update_website_home", formData);
       setIsLoading(false);
       if (res.response === 200) {
-        ShowToast(toast, "success", "Home content updated");
+        ShowToast(toast, "success", "تم تحديث محتوى الرئيسية");
         setHeroBanner(null);
         queryClient.invalidateQueries(["website-home"]);
       } else {
@@ -152,7 +158,7 @@ function HomeContent() {
   const removeBanner = async () => {
     const res = await DELETE(admin.token, "remove_website_home_banner", {});
     if (res.response === 200) {
-      ShowToast(toast, "success", "Hero banner removed");
+      ShowToast(toast, "success", "تم حذف صورة الهيرو");
       queryClient.invalidateQueries(["website-home"]);
     }
   };
@@ -161,72 +167,86 @@ function HomeContent() {
 
   return (
     <Box as="form" onSubmit={handleSubmit(handleUpdate)}>
-      <SectionTitle title="Hero Section" />
+      <SectionTitle title="قسم الهيرو" />
       <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
-        <InputField label="Hero Title" name="hero_title" register={register} />
-        <InputField label="Button Text" name="hero_button_text" register={register} />
-        <InputField label="Button Href" name="hero_button_href" register={register} />
+        <TranslatedInput label="عنوان الهيرو" enName="hero_title" arName="hero_title_ar" register={register} />
+        <TranslatedInput label="نص الزر" enName="hero_button_text" arName="hero_button_text_ar" register={register} />
+        <InputField label="رابط الزر" name="hero_button_href" register={register} dir="ltr" />
         <FormControl>
-          <FormLabel>Hero Banner</FormLabel>
+          <FormLabel>صورة الهيرو</FormLabel>
           <Input type="file" accept=".jpeg,.jpg,.png,.webp,.svg" onChange={(e) => setHeroBanner(e.target.files[0])} />
         </FormControl>
         <GridItem colSpan={{ base: 1, lg: 2 }}>
-          <TextareaField label="Description" name="hero_description" register={register} />
+          <TranslatedTextarea label="الوصف" enName="hero_description" arName="hero_description_ar" register={register} />
         </GridItem>
         <GridItem colSpan={{ base: 1, lg: 2 }}>
-          <TextareaField label="Sub Description" name="hero_sub_description" register={register} />
+          <TranslatedTextarea label="الوصف الإضافي" enName="hero_sub_description" arName="hero_sub_description_ar" register={register} />
         </GridItem>
       </Grid>
       {data?.content?.hero_banner && (
         <Flex mt={4} gap={4} align="center">
           <Image src={`${imageBaseURL}/${data.content.hero_banner}`} boxSize="90px" objectFit="cover" borderRadius={6} />
           <Button size="sm" colorScheme="red" onClick={removeBanner}>
-            Remove Banner
+            حذف الصورة
           </Button>
         </Flex>
       )}
 
-      <SectionTitle title="Second Section" />
+      <SectionTitle title="القسم الثاني" />
       <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
-        <InputField label="Section Title" name="features_title" register={register} />
-        <TextareaField label="Section Description" name="features_description" register={register} />
+        <TranslatedInput label="عنوان القسم" enName="features_title" arName="features_title_ar" register={register} />
+        <TranslatedTextarea label="وصف القسم" enName="features_description" arName="features_description_ar" register={register} />
       </Grid>
+      <HomeFeatures maxItems={6} />
 
-      <SectionTitle title="Third Section" />
+      <SectionTitle title="القسم الثالث" />
       <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
-        <InputField label="Section Title" name="cta_title" register={register} />
-        <InputField label="Button Text" name="cta_button_text" register={register} />
-        <InputField label="Button Href" name="cta_button_href" register={register} />
-        <TextareaField label="Section Description" name="cta_description" register={register} />
-        <InputField label="First Subtitle Icon" name="cta_first_icon" register={register} />
-        <InputField label="First Subtitle" name="cta_first_title" register={register} />
-        <InputField label="Second Subtitle Icon" name="cta_second_icon" register={register} />
-        <InputField label="Second Subtitle" name="cta_second_title" register={register} />
+        <TranslatedInput label="عنوان القسم" enName="cta_title" arName="cta_title_ar" register={register} />
+        <TranslatedInput label="نص الزر" enName="cta_button_text" arName="cta_button_text_ar" register={register} />
+        <InputField label="رابط الزر" name="cta_button_href" register={register} dir="ltr" />
+        <TranslatedTextarea label="وصف القسم" enName="cta_description" arName="cta_description_ar" register={register} />
+        <InputField label="أيقونة العنوان الفرعي الأول" name="cta_first_icon" register={register} dir="ltr" />
+        <TranslatedInput label="العنوان الفرعي الأول" enName="cta_first_title" arName="cta_first_title_ar" register={register} />
+        <InputField label="أيقونة العنوان الفرعي الثاني" name="cta_second_icon" register={register} dir="ltr" />
+        <TranslatedInput label="العنوان الفرعي الثاني" enName="cta_second_title" arName="cta_second_title_ar" register={register} />
       </Grid>
 
       <Flex justify="end" mt={6}>
         <Button type="submit" colorScheme="blue" isLoading={isLoading}>
-          Save
+          حفظ
         </Button>
       </Flex>
     </Box>
   );
 }
 
-function HomeFeatures() {
-  const empty = { icon: "", title: "", description: "", sort_order: 0, is_active: true };
+function HomeFeatures({ maxItems }) {
+  const empty = { icon: "", title: "", title_ar: "", description: "", description_ar: "", sort_order: 0, is_active: true };
   const [form, setForm] = useState(empty);
   const [selectedId, setSelectedId] = useState(null);
   const queryClient = useQueryClient();
   const toast = useToast();
   const { data, isLoading } = useQuery({ queryKey: ["website-home"], queryFn: getWebsiteHome });
+  const featuresCount = data?.features?.length || 0;
+  const maxReached = maxItems && featuresCount >= maxItems && !selectedId;
 
   const saveFeature = async () => {
+    if (maxReached) {
+      ShowToast(toast, "error", `يمكنك إضافة ${maxItems} عناصر فقط`);
+      return;
+    }
+
     const endpoint = selectedId ? "update_website_home_feature" : "add_website_home_feature";
     const action = selectedId ? UPDATE : ADD;
-    const res = await action(admin.token, endpoint, { ...form, id: selectedId });
+    const payload = {
+      ...form,
+      id: selectedId,
+      sort_order: selectedId ? form.sort_order : featuresCount + 1,
+      is_active: true,
+    };
+    const res = await action(admin.token, endpoint, payload);
     if (res.response === 200) {
-      ShowToast(toast, "success", "Feature saved");
+      ShowToast(toast, "success", "تم حفظ العنصر");
       setForm(empty);
       setSelectedId(null);
       queryClient.invalidateQueries(["website-home"]);
@@ -238,7 +258,7 @@ function HomeFeatures() {
   const deleteFeature = async (id) => {
     const res = await DELETE(admin.token, "delete_website_home_feature", { id });
     if (res.response === 200) {
-      ShowToast(toast, "success", "Feature deleted");
+      ShowToast(toast, "success", "تم حذف العنصر");
       queryClient.invalidateQueries(["website-home"]);
     }
   };
@@ -246,22 +266,27 @@ function HomeFeatures() {
   if (isLoading) return <Skeleton h={300} />;
 
   return (
-    <Box>
-      <Grid templateColumns={{ base: "1fr", lg: "120px 1fr 1fr 120px 120px" }} gap={3} alignItems="end">
-        <PlainInput label="Icon" value={form.icon} onChange={(value) => setForm({ ...form, icon: value })} />
-        <PlainInput label="Title" value={form.title} onChange={(value) => setForm({ ...form, title: value })} />
-        <PlainInput label="Description" value={form.description} onChange={(value) => setForm({ ...form, description: value })} />
-        <PlainInput label="Order" type="number" value={form.sort_order} onChange={(value) => setForm({ ...form, sort_order: value })} />
-        <Checkbox isChecked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })}>
-          Active
-        </Checkbox>
+    <Box mt={5}>
+      <Flex justify="space-between" align="center" mb={3} gap={3}>
+        <Heading size="xs">عناصر القسم الثاني</Heading>
+        <Badge colorScheme={maxReached ? "red" : "blue"}>
+          {featuresCount}/{maxItems || "unlimited"}
+        </Badge>
+      </Flex>
+      <Grid templateColumns={{ base: "1fr", lg: "160px repeat(2, 1fr)" }} gap={3} alignItems="end">
+        <PlainInput label="الأيقونة" value={form.icon} onChange={(value) => setForm({ ...form, icon: value })} dir="ltr" />
+        <PlainInput label="العنوان بالإنجليزي" value={form.title} onChange={(value) => setForm({ ...form, title: value })} dir="ltr" />
+        <PlainInput label="العنوان بالعربي" value={form.title_ar} onChange={(value) => setForm({ ...form, title_ar: value })} />
+        <GridItem colSpan={{ base: 1, lg: 1 }} />
+        <PlainTextarea label="الوصف بالإنجليزي" value={form.description} onChange={(value) => setForm({ ...form, description: value })} rows={2} dir="ltr" />
+        <PlainTextarea label="الوصف بالعربي" value={form.description_ar} onChange={(value) => setForm({ ...form, description_ar: value })} rows={2} />
       </Grid>
       <Flex gap={2} justify="end" mt={4}>
         <Button size="sm" onClick={() => { setForm(empty); setSelectedId(null); }}>
-          Clear
+          تفريغ
         </Button>
-        <Button size="sm" colorScheme="blue" onClick={saveFeature} isDisabled={!form.title}>
-          {selectedId ? "Update" : "Add"} Feature
+        <Button size="sm" colorScheme="blue" onClick={saveFeature} isDisabled={(!form.title && !form.title_ar) || maxReached}>
+          {selectedId ? "تحديث" : "إضافة"} عنصر
         </Button>
       </Flex>
       <Divider my={5} />
@@ -270,13 +295,13 @@ function HomeFeatures() {
           <Box key={item.id} borderWidth="1px" borderRadius={6} p={4}>
             <Flex justify="space-between" gap={3}>
               <Text fontWeight="bold">{item.title}</Text>
-              <Badge colorScheme={item.is_active ? "green" : "gray"}>{item.is_active ? "Active" : "Hidden"}</Badge>
+              <Badge colorScheme={item.is_active ? "green" : "gray"}>{item.is_active ? "ظاهر" : "مخفي"}</Badge>
             </Flex>
             <Text fontSize="sm" color="gray.600" mt={1}>{item.icon}</Text>
             <Text mt={2}>{item.description}</Text>
             <Flex justify="end" gap={2} mt={4}>
-              <Button size="xs" onClick={() => { setSelectedId(item.id); setForm(item); }}>Edit</Button>
-              <Button size="xs" colorScheme="red" onClick={() => deleteFeature(item.id)}>Delete</Button>
+              <Button size="xs" onClick={() => { setSelectedId(item.id); setForm(item); }}>تعديل</Button>
+              <Button size="xs" colorScheme="red" onClick={() => deleteFeature(item.id)}>حذف</Button>
             </Flex>
           </Box>
         ))}
@@ -310,7 +335,7 @@ function AboutUs() {
       const res = await UPDATE(admin.token, "update_website_about", formData);
       setIsSaving(false);
       if (res.response === 200) {
-        ShowToast(toast, "success", "About us content updated");
+        ShowToast(toast, "success", "تم تحديث محتوى من نحن");
         setSectionOneImages([]);
         setSectionTwoImages({});
         queryClient.invalidateQueries(["website-about"]);
@@ -327,14 +352,14 @@ function AboutUs() {
 
   return (
     <Box as="form" onSubmit={handleSubmit(handleUpdate)}>
-      <SectionTitle title="Main Description" />
-      <TextareaField label="Description" name="description" register={register} />
+      <SectionTitle title="الوصف الرئيسي" />
+      <TranslatedTextarea label="الوصف" enName="description" arName="description_ar" register={register} />
 
-      <SectionTitle title="First Section" />
+      <SectionTitle title="القسم الأول" />
       <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
-        <InputField label="Title" name="section_one_title" register={register} />
+        <TranslatedInput label="العنوان" enName="section_one_title" arName="section_one_title_ar" register={register} />
         <FormControl>
-          <FormLabel>Images</FormLabel>
+          <FormLabel>الصور</FormLabel>
           <Input
             type="file"
             multiple
@@ -343,7 +368,7 @@ function AboutUs() {
           />
         </FormControl>
         <GridItem colSpan={{ base: 1, lg: 2 }}>
-          <TextareaField label="Description" name="section_one_description" register={register} />
+          <TranslatedTextarea label="الوصف" enName="section_one_description" arName="section_one_description_ar" register={register} />
         </GridItem>
       </Grid>
       {!!data?.section_one_images?.length && (
@@ -354,15 +379,15 @@ function AboutUs() {
         </Flex>
       )}
 
-      <SectionTitle title="Second Section" />
+      <SectionTitle title="القسم الثاني" />
       <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
-        <InputField label="Title" name="section_two_title" register={register} />
-        <ImageInput label="Image One" name="section_two_image_one" onChange={setSectionTwoImages} />
-        <TextareaField label="Description One" name="section_two_description_one" register={register} />
-        <ImageInput label="Image Two" name="section_two_image_two" onChange={setSectionTwoImages} />
-        <TextareaField label="Description Two" name="section_two_description_two" register={register} />
-        <ImageInput label="Image Three" name="section_two_image_three" onChange={setSectionTwoImages} />
-        <TextareaField label="Description Three" name="section_two_description_three" register={register} />
+        <TranslatedInput label="العنوان" enName="section_two_title" arName="section_two_title_ar" register={register} />
+        <ImageInput label="الصورة الأولى" name="section_two_image_one" onChange={setSectionTwoImages} />
+        <TranslatedTextarea label="الوصف الأول" enName="section_two_description_one" arName="section_two_description_one_ar" register={register} />
+        <ImageInput label="الصورة الثانية" name="section_two_image_two" onChange={setSectionTwoImages} />
+        <TranslatedTextarea label="الوصف الثاني" enName="section_two_description_two" arName="section_two_description_two_ar" register={register} />
+        <ImageInput label="الصورة الثالثة" name="section_two_image_three" onChange={setSectionTwoImages} />
+        <TranslatedTextarea label="الوصف الثالث" enName="section_two_description_three" arName="section_two_description_three_ar" register={register} />
       </Grid>
       <Flex mt={4} gap={3} wrap="wrap">
         {["section_two_image_one", "section_two_image_two", "section_two_image_three"].map((field) => (
@@ -372,7 +397,7 @@ function AboutUs() {
 
       <Flex justify="end" mt={6}>
         <Button type="submit" colorScheme="blue" isLoading={isSaving}>
-          Save
+          حفظ
         </Button>
       </Flex>
     </Box>
@@ -380,7 +405,7 @@ function AboutUs() {
 }
 
 function Categories() {
-  const [form, setForm] = useState({ name: "", slug: "", is_active: true });
+  const [form, setForm] = useState({ name: "", name_ar: "", slug: "", is_active: true });
   const [selectedId, setSelectedId] = useState(null);
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -391,8 +416,8 @@ function Categories() {
     const action = selectedId ? UPDATE : ADD;
     const res = await action(admin.token, endpoint, { ...form, id: selectedId });
     if (res.response === 200) {
-      ShowToast(toast, "success", "Category saved");
-      setForm({ name: "", slug: "", is_active: true });
+      ShowToast(toast, "success", "تم حفظ التصنيف");
+      setForm({ name: "", name_ar: "", slug: "", is_active: true });
       setSelectedId(null);
       queryClient.invalidateQueries(["blog-categories"]);
     } else {
@@ -403,7 +428,7 @@ function Categories() {
   const deleteCategory = async (id) => {
     const res = await DELETE(admin.token, "delete_blog_category", { id });
     if (res.response === 200) {
-      ShowToast(toast, "success", "Category deleted");
+      ShowToast(toast, "success", "تم حذف التصنيف");
       queryClient.invalidateQueries(["blog-categories"]);
     }
   };
@@ -413,15 +438,16 @@ function Categories() {
   return (
     <Box>
       <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr 120px" }} gap={3} alignItems="end">
-        <PlainInput label="Name" value={form.name} onChange={(value) => setForm({ ...form, name: value })} />
-        <PlainInput label="Slug" value={form.slug} onChange={(value) => setForm({ ...form, slug: value })} />
+        <PlainInput label="الاسم بالإنجليزي" value={form.name} onChange={(value) => setForm({ ...form, name: value })} dir="ltr" />
+        <PlainInput label="الاسم بالعربي" value={form.name_ar} onChange={(value) => setForm({ ...form, name_ar: value })} />
+        <PlainInput label="الرابط المختصر" value={form.slug} onChange={(value) => setForm({ ...form, slug: value })} dir="ltr" />
         <Checkbox isChecked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })}>
-          Active
+          ظاهر
         </Checkbox>
       </Grid>
       <Flex gap={2} justify="end" mt={4}>
-        <Button size="sm" onClick={() => { setForm({ name: "", slug: "", is_active: true }); setSelectedId(null); }}>Clear</Button>
-        <Button size="sm" colorScheme="blue" onClick={saveCategory} isDisabled={!form.name}>{selectedId ? "Update" : "Add"} Category</Button>
+        <Button size="sm" onClick={() => { setForm({ name: "", name_ar: "", slug: "", is_active: true }); setSelectedId(null); }}>تفريغ</Button>
+        <Button size="sm" colorScheme="blue" onClick={saveCategory} isDisabled={!form.name && !form.name_ar}>{selectedId ? "تحديث" : "إضافة"} تصنيف</Button>
       </Flex>
       <Divider my={5} />
       <DynamicTable
@@ -433,8 +459,157 @@ function Categories() {
   );
 }
 
+function Services() {
+  const { register, handleSubmit, reset } = useForm();
+  const empty = {
+    title: "",
+    title_ar: "",
+    slug: "",
+    small_description: "",
+    small_description_ar: "",
+    description: "",
+    description_ar: "",
+    sort_order: 0,
+    is_active: true,
+  };
+  const [form, setForm] = useState(empty);
+  const [selectedId, setSelectedId] = useState(null);
+  const [image, setImage] = useState(null);
+  const [isSavingSection, setIsSavingSection] = useState(false);
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const { data, isLoading } = useQuery({ queryKey: ["website-services"], queryFn: getServices });
+
+  useEffect(() => {
+    if (data?.section) reset(data.section);
+  }, [data, reset]);
+
+  const saveSection = async (values) => {
+    try {
+      setIsSavingSection(true);
+      const res = await UPDATE(admin.token, "update_website_services_section", values);
+      setIsSavingSection(false);
+      if (res.response === 200) {
+        ShowToast(toast, "success", "تم حفظ بيانات قسم الخدمات");
+        queryClient.invalidateQueries(["website-services"]);
+      } else {
+        ShowToast(toast, "error", res.message);
+      }
+    } catch (error) {
+      setIsSavingSection(false);
+      ShowToast(toast, "error", JSON.stringify(error));
+    }
+  };
+
+  const saveService = async () => {
+    const endpoint = selectedId ? "update_website_service" : "add_website_service";
+    const action = selectedId ? UPDATE : ADD;
+    const payload = { ...form, id: selectedId };
+    if (image) payload.image = image;
+
+    const res = await action(admin.token, endpoint, payload);
+    if (res.response === 200) {
+      ShowToast(toast, "success", "تم حفظ الخدمة");
+      setForm(empty);
+      setSelectedId(null);
+      setImage(null);
+      queryClient.invalidateQueries(["website-services"]);
+    } else {
+      ShowToast(toast, "error", res.message);
+    }
+  };
+
+  const deleteService = async (id) => {
+    const res = await DELETE(admin.token, "delete_website_service", { id });
+    if (res.response === 200) {
+      ShowToast(toast, "success", "تم حذف الخدمة");
+      queryClient.invalidateQueries(["website-services"]);
+    }
+  };
+
+  if (isLoading) return <Skeleton h={400} />;
+
+  return (
+    <Box>
+      <Box as="form" onSubmit={handleSubmit(saveSection)}>
+        <SectionTitle title="بيانات قسم الخدمات" />
+        <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
+          <TranslatedInput label="عنوان القسم" enName="title" arName="title_ar" register={register} />
+          <GridItem colSpan={{ base: 1, lg: 2 }}>
+            <TranslatedTextarea label="وصف القسم" enName="description" arName="description_ar" register={register} />
+          </GridItem>
+        </Grid>
+        <Flex justify="end" mt={4}>
+          <Button type="submit" colorScheme="blue" isLoading={isSavingSection}>
+            حفظ بيانات القسم
+          </Button>
+        </Flex>
+      </Box>
+
+      <Divider my={6} />
+      <SectionTitle title={selectedId ? "تعديل خدمة" : "إضافة خدمة"} />
+      <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
+        <PlainInput label="عنوان الخدمة بالإنجليزي" value={form.title} onChange={(value) => setForm({ ...form, title: value })} dir="ltr" />
+        <PlainInput label="عنوان الخدمة بالعربي" value={form.title_ar} onChange={(value) => setForm({ ...form, title_ar: value })} />
+        <PlainInput label="الرابط المختصر" value={form.slug} onChange={(value) => setForm({ ...form, slug: value })} dir="ltr" />
+        <PlainInput label="الترتيب" type="number" value={form.sort_order} onChange={(value) => setForm({ ...form, sort_order: value })} />
+        <FormControl>
+          <FormLabel>صورة الخدمة</FormLabel>
+          <Input type="file" accept=".jpeg,.jpg,.png,.webp,.svg" onChange={(e) => setImage(e.target.files[0])} />
+        </FormControl>
+        <Checkbox isChecked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })}>
+          ظاهر
+        </Checkbox>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="الوصف المختصر بالإنجليزي" value={form.small_description} onChange={(value) => setForm({ ...form, small_description: value })} rows={2} dir="ltr" />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="الوصف المختصر بالعربي" value={form.small_description_ar} onChange={(value) => setForm({ ...form, small_description_ar: value })} rows={2} />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="الوصف الكبير بالإنجليزي" value={form.description} onChange={(value) => setForm({ ...form, description: value })} rows={7} dir="ltr" />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="الوصف الكبير بالعربي" value={form.description_ar} onChange={(value) => setForm({ ...form, description_ar: value })} rows={7} />
+        </GridItem>
+      </Grid>
+      <Flex gap={2} justify="end" mt={4}>
+        <Button size="sm" onClick={() => { setForm(empty); setSelectedId(null); setImage(null); }}>
+          تفريغ
+        </Button>
+        <Button size="sm" colorScheme="blue" onClick={saveService} isDisabled={!form.title && !form.title_ar}>
+          {selectedId ? "تحديث" : "إضافة"} خدمة
+        </Button>
+      </Flex>
+
+      <Divider my={5} />
+      <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" }} gap={4}>
+        {data?.services?.map((item) => (
+          <Box key={item.id} borderWidth="1px" borderRadius={6} p={4}>
+            <Flex justify="space-between" gap={3} align="start">
+              <Box>
+                <Text fontWeight="bold">{item.title}</Text>
+                <Text fontSize="sm" color="gray.600" dir="ltr">{item.slug}</Text>
+              </Box>
+              <Badge colorScheme={item.is_active ? "green" : "gray"}>{item.is_active ? "ظاهر" : "مخفي"}</Badge>
+            </Flex>
+            {item.image && (
+              <Image src={`${imageBaseURL}/${item.image}`} w="100%" h="130px" objectFit="cover" borderRadius={6} mt={3} />
+            )}
+            <Text mt={3} noOfLines={2}>{item.small_description}</Text>
+            <Flex justify="end" gap={2} mt={4}>
+              <Button size="xs" onClick={() => { setSelectedId(item.id); setForm(item); setImage(null); }}>تعديل</Button>
+              <Button size="xs" colorScheme="red" onClick={() => deleteService(item.id)}>حذف</Button>
+            </Flex>
+          </Box>
+        ))}
+      </Grid>
+    </Box>
+  );
+}
+
 function Blogs() {
-  const empty = { title: "", slug: "", blog_category_id: "", description: "", content: "", is_published: true };
+  const empty = { title: "", title_ar: "", slug: "", blog_category_id: "", description: "", description_ar: "", content: "", content_ar: "", is_published: true };
   const [form, setForm] = useState(empty);
   const [selectedId, setSelectedId] = useState(null);
   const [image, setImage] = useState(null);
@@ -450,7 +625,7 @@ function Blogs() {
     if (image) payload.image = image;
     const res = await action(admin.token, endpoint, payload);
     if (res.response === 200) {
-      ShowToast(toast, "success", "Blog saved");
+      ShowToast(toast, "success", "تم حفظ المقال");
       setForm(empty);
       setSelectedId(null);
       setImage(null);
@@ -463,7 +638,7 @@ function Blogs() {
   const deleteBlog = async (id) => {
     const res = await DELETE(admin.token, "delete_blog", { id });
     if (res.response === 200) {
-      ShowToast(toast, "success", "Blog deleted");
+      ShowToast(toast, "success", "تم حذف المقال");
       queryClient.invalidateQueries(["blogs"]);
     }
   };
@@ -473,6 +648,7 @@ function Blogs() {
   const tableData = data?.map((item) => ({
     id: item.id,
     title: item.title,
+    title_ar: item.title_ar,
     category: item.category?.name,
     slug: item.slug,
     image: item.image,
@@ -483,41 +659,48 @@ function Blogs() {
   return (
     <Box>
       <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={3}>
-        <PlainInput label="Title" value={form.title} onChange={(value) => setForm({ ...form, title: value })} />
-        <PlainInput label="Slug" value={form.slug} onChange={(value) => setForm({ ...form, slug: value })} />
+        <PlainInput label="العنوان بالإنجليزي" value={form.title} onChange={(value) => setForm({ ...form, title: value })} dir="ltr" />
+        <PlainInput label="العنوان بالعربي" value={form.title_ar} onChange={(value) => setForm({ ...form, title_ar: value })} />
+        <PlainInput label="الرابط المختصر" value={form.slug} onChange={(value) => setForm({ ...form, slug: value })} dir="ltr" />
         <FormControl>
-          <FormLabel>Category</FormLabel>
+          <FormLabel>التصنيف</FormLabel>
           <Select value={form.blog_category_id || ""} onChange={(e) => setForm({ ...form, blog_category_id: e.target.value })}>
-            <option value="">Select Category</option>
+            <option value="">اختر التصنيف</option>
             {categories?.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
           </Select>
         </FormControl>
         <FormControl>
-          <FormLabel>Image</FormLabel>
+          <FormLabel>الصورة</FormLabel>
           <Input type="file" accept=".jpeg,.jpg,.png,.webp,.svg" onChange={(e) => setImage(e.target.files[0])} />
         </FormControl>
         <GridItem colSpan={{ base: 1, lg: 2 }}>
-          <PlainTextarea label="Description" value={form.description} onChange={(value) => setForm({ ...form, description: value })} />
+          <PlainTextarea label="الوصف المختصر بالإنجليزي" value={form.description} onChange={(value) => setForm({ ...form, description: value })} dir="ltr" />
         </GridItem>
         <GridItem colSpan={{ base: 1, lg: 2 }}>
-          <PlainTextarea label="Content" value={form.content} onChange={(value) => setForm({ ...form, content: value })} rows={8} />
+          <PlainTextarea label="الوصف المختصر بالعربي" value={form.description_ar} onChange={(value) => setForm({ ...form, description_ar: value })} />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="محتوى المقال بالإنجليزي" value={form.content} onChange={(value) => setForm({ ...form, content: value })} rows={8} dir="ltr" />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="محتوى المقال بالعربي" value={form.content_ar} onChange={(value) => setForm({ ...form, content_ar: value })} rows={8} />
         </GridItem>
         <Checkbox isChecked={form.is_published} onChange={(e) => setForm({ ...form, is_published: e.target.checked })}>
-          Published
+          منشور
         </Checkbox>
       </Grid>
       <Flex gap={2} justify="end" mt={4}>
-        <Button size="sm" onClick={() => { setForm(empty); setSelectedId(null); setImage(null); }}>Clear</Button>
-        <Button size="sm" colorScheme="blue" onClick={saveBlog} isDisabled={!form.title}>{selectedId ? "Update" : "Add"} Blog</Button>
+        <Button size="sm" onClick={() => { setForm(empty); setSelectedId(null); setImage(null); }}>تفريغ</Button>
+        <Button size="sm" colorScheme="blue" onClick={saveBlog} isDisabled={!form.title && !form.title_ar}>{selectedId ? "تحديث" : "إضافة"} مقال</Button>
       </Flex>
       <Divider my={5} />
       <DynamicTable
         data={tableData}
         minPad="8px 8px"
         onActionClick={<RowActions onEdit={(row) => {
-          const original = data.find((item) => item.id === row.id);
-          setSelectedId(row.id);
-          setForm(original);
+      const original = data.find((item) => item.id === row.id);
+      setSelectedId(row.id);
+      setForm(original);
         }} onDelete={(row) => deleteBlog(row.id)} />}
       />
     </Box>
@@ -530,9 +713,9 @@ function ContactMessages() {
   const { data, isLoading } = useQuery({ queryKey: ["website-contact-messages"], queryFn: getMessages });
 
   const updateStatus = async (row, status) => {
-    const res = await UPDATE(admin.token, "update_website_contact_message_status", { id: row.id, status });
+      const res = await UPDATE(admin.token, "update_website_contact_message_status", { id: row.id, status });
     if (res.response === 200) {
-      ShowToast(toast, "success", "Message status updated");
+      ShowToast(toast, "success", "تم تحديث حالة الرسالة");
       queryClient.invalidateQueries(["website-contact-messages"]);
     }
   };
@@ -540,7 +723,7 @@ function ContactMessages() {
   const deleteMessage = async (row) => {
     const res = await DELETE(admin.token, "delete_website_contact_message", { id: row.id });
     if (res.response === 200) {
-      ShowToast(toast, "success", "Message deleted");
+      ShowToast(toast, "success", "تم حذف الرسالة");
       queryClient.invalidateQueries(["website-contact-messages"]);
     }
   };
@@ -557,7 +740,7 @@ function ContactMessages() {
 }
 
 function Faqs() {
-  const empty = { question: "", answer: "", sort_order: 0, is_active: true };
+  const empty = { question: "", question_ar: "", answer: "", answer_ar: "", sort_order: 0, is_active: true };
   const [form, setForm] = useState(empty);
   const [selectedId, setSelectedId] = useState(null);
   const queryClient = useQueryClient();
@@ -570,7 +753,7 @@ function Faqs() {
     const res = await action(admin.token, endpoint, { ...form, id: selectedId });
 
     if (res.response === 200) {
-      ShowToast(toast, "success", "FAQ saved");
+      ShowToast(toast, "success", "تم حفظ السؤال");
       setForm(empty);
       setSelectedId(null);
       queryClient.invalidateQueries(["website-faqs"]);
@@ -582,7 +765,7 @@ function Faqs() {
   const deleteFaq = async (id) => {
     const res = await DELETE(admin.token, "delete_website_faq", { id });
     if (res.response === 200) {
-      ShowToast(toast, "success", "FAQ deleted");
+      ShowToast(toast, "success", "تم حذف السؤال");
       queryClient.invalidateQueries(["website-faqs"]);
     }
   };
@@ -592,19 +775,25 @@ function Faqs() {
   return (
     <Box>
       <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr 120px 120px" }} gap={3} alignItems="end">
-        <PlainInput label="Question" value={form.question} onChange={(value) => setForm({ ...form, question: value })} />
-        <PlainTextarea label="Answer" value={form.answer} onChange={(value) => setForm({ ...form, answer: value })} rows={2} />
-        <PlainInput label="Order" type="number" value={form.sort_order} onChange={(value) => setForm({ ...form, sort_order: value })} />
+        <PlainInput label="السؤال بالإنجليزي" value={form.question} onChange={(value) => setForm({ ...form, question: value })} dir="ltr" />
+        <PlainInput label="السؤال بالعربي" value={form.question_ar} onChange={(value) => setForm({ ...form, question_ar: value })} />
+        <PlainInput label="الترتيب" type="number" value={form.sort_order} onChange={(value) => setForm({ ...form, sort_order: value })} />
         <Checkbox isChecked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })}>
-          Active
+          ظاهر
         </Checkbox>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="الإجابة بالإنجليزي" value={form.answer} onChange={(value) => setForm({ ...form, answer: value })} rows={3} dir="ltr" />
+        </GridItem>
+        <GridItem colSpan={{ base: 1, lg: 2 }}>
+          <PlainTextarea label="الإجابة بالعربي" value={form.answer_ar} onChange={(value) => setForm({ ...form, answer_ar: value })} rows={3} />
+        </GridItem>
       </Grid>
       <Flex gap={2} justify="end" mt={4}>
         <Button size="sm" onClick={() => { setForm(empty); setSelectedId(null); }}>
-          Clear
+          تفريغ
         </Button>
-        <Button size="sm" colorScheme="blue" onClick={saveFaq} isDisabled={!form.question || !form.answer}>
-          {selectedId ? "Update" : "Add"} FAQ
+        <Button size="sm" colorScheme="blue" onClick={saveFaq} isDisabled={(!form.question && !form.question_ar) || (!form.answer && !form.answer_ar)}>
+          {selectedId ? "تحديث" : "إضافة"} سؤال
         </Button>
       </Flex>
       <Divider my={5} />
@@ -625,38 +814,56 @@ function SectionTitle({ title }) {
   );
 }
 
-function InputField({ label, name, register }) {
+function InputField({ label, name, register, dir = "rtl" }) {
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Input {...register(name)} />
+      <Input dir={dir} {...register(name)} />
     </FormControl>
   );
 }
 
-function TextareaField({ label, name, register }) {
+function TextareaField({ label, name, register, dir = "rtl" }) {
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Textarea {...register(name)} />
+      <Textarea dir={dir} {...register(name)} />
     </FormControl>
   );
 }
 
-function PlainInput({ label, value, onChange, type = "text" }) {
+function TranslatedInput({ label, enName, arName, register }) {
+  return (
+    <>
+      <InputField label={`${label} بالإنجليزي`} name={enName} register={register} dir="ltr" />
+      <InputField label={`${label} بالعربي`} name={arName} register={register} />
+    </>
+  );
+}
+
+function TranslatedTextarea({ label, enName, arName, register }) {
+  return (
+    <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
+      <TextareaField label={`${label} بالإنجليزي`} name={enName} register={register} dir="ltr" />
+      <TextareaField label={`${label} بالعربي`} name={arName} register={register} />
+    </Grid>
+  );
+}
+
+function PlainInput({ label, value, onChange, type = "text", dir = "rtl" }) {
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Input type={type} value={value || ""} onChange={(e) => onChange(e.target.value)} />
+      <Input dir={dir} type={type} value={value || ""} onChange={(e) => onChange(e.target.value)} />
     </FormControl>
   );
 }
 
-function PlainTextarea({ label, value, onChange, rows = 4 }) {
+function PlainTextarea({ label, value, onChange, rows = 4, dir = "rtl" }) {
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
-      <Textarea rows={rows} value={value || ""} onChange={(e) => onChange(e.target.value)} />
+      <Textarea dir={dir} rows={rows} value={value || ""} onChange={(e) => onChange(e.target.value)} />
     </FormControl>
   );
 }
@@ -677,8 +884,8 @@ function ImageInput({ label, name, onChange }) {
 function RowActions({ rowData, onEdit, onDelete }) {
   return (
     <Flex justify="center" gap={2}>
-      <Button size="xs" onClick={() => onEdit(rowData)}>Edit</Button>
-      <Button size="xs" colorScheme="red" onClick={() => onDelete(rowData)}>Delete</Button>
+      <Button size="xs" onClick={() => onEdit(rowData)}>تعديل</Button>
+      <Button size="xs" colorScheme="red" onClick={() => onDelete(rowData)}>حذف</Button>
     </Flex>
   );
 }
@@ -686,8 +893,8 @@ function RowActions({ rowData, onEdit, onDelete }) {
 function MessageActions({ rowData, onRead, onDelete }) {
   return (
     <Flex justify="center" gap={2}>
-      <Button size="xs" onClick={() => onRead(rowData)}>Read</Button>
-      <Button size="xs" colorScheme="red" onClick={() => onDelete(rowData)}>Delete</Button>
+      <Button size="xs" onClick={() => onRead(rowData)}>مقروءة</Button>
+      <Button size="xs" colorScheme="red" onClick={() => onDelete(rowData)}>حذف</Button>
     </Flex>
   );
 }
